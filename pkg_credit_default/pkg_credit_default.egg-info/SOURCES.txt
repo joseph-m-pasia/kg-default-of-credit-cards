@@ -1,0 +1,6 @@
+pyproject.toml
+pkg_credit_default.egg-info/PKG-INFO
+pkg_credit_default.egg-info/SOURCES.txt
+pkg_credit_default.egg-info/dependency_links.txt
+pkg_credit_default.egg-info/requires.txt
+pkg_credit_default.egg-info/top_level.txt
