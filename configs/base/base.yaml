@@ -1,0 +1,9 @@
+paths:
+  base_config: "configs/base/base.yaml"                      # base configuration file
+  env_config:  "configs/dev/training.yaml"                   # environment-specific configuration file (e.g., dev, prod)
+  
+data:
+  raw_path:       "data/raw/UCI_Credit_Card.csv"             # folder containing original raw data files
+  processed_path: "data/processed/"                          # folder to store cleaned/processed data    
+  target_var:     "default.payment.next.month"               # target variable
+  source: local
