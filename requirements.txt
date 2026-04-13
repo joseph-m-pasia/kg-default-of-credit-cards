@@ -1,0 +1,12 @@
+pandas
+numpy
+tensorflow
+scikit-learn
+joblib
+matplotlib
+seaborn
+fastapi
+uvicorn
+pyyaml
+pathlib
+deepmerge
