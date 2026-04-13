@@ -1,0 +1,112 @@
+my_ml_project/
+├── credit_default_ml/                 # 📦 CORE PYTHON PACKAGE (installable)
+│   ├── __init__.py
+│   │
+│   ├── data/                          # Data ingestion + preprocessing
+│   │   ├── loaders/
+│   │   ├── preprocessors/
+│   │   └── validators/
+│   │
+│   ├── features/                      # Feature engineering
+│   │   ├── transformers/
+│   │   └── feature_builder.py
+│   │
+│   ├── modeling/                     # Model definitions + training logic
+│   │   ├── models/
+│   │   ├── trainer.py
+│   │   ├── evaluator.py
+│   │   └── predictor.py
+│   │
+│   ├── pipelines/                    # End-to-end workflows
+│   │   ├── training_pipeline.py
+│   │   └── inference_pipeline.py
+│   │
+│   ├── services/                     # ⭐ PUBLIC INTERFACE (MOST IMPORTANT)
+│   │   ├── inference_service.py      # predict(), load_model()
+│   │   └── training_service.py
+│   │
+│   ├── config/                       # ⭐ SYSTEM CONFIGURATION (NOT utils)
+│   │   ├── config_paths.py           # ENV → config selection
+│   │   ├── settings.py               # environment variables
+│   │   ├── loader.py                 # YAML loading + merge logic
+│   │   └── merge.py                  # base + env merge
+│   │
+│   └── utils/                        # Helper functions (generic tools)
+│       ├── logging/
+│       ├── exceptions/
+│       └── decorators/
+│
+├── api/                              # 🌐 FASTAPI (external interface)
+│   ├── v1/
+│   │   ├── routers/
+│   │   │   ├── predict.py
+│   │   │   ├── health.py
+│   │   │   └── metadata.py
+│   │   │
+│   │   ├── schemas/
+│   │   │   ├── request.py
+│   │   │   └── response.py
+│   │   │
+│   │   └── dependencies/
+│   │       ├── model.py
+│   │       └── auth.py
+│   │
+│   ├── core/
+│   │   ├── config.py                 # API-specific settings
+│   │   └── security.py               # auth, API keys
+│   │
+│   └── main.py                       # FastAPI entrypoint
+│
+├── scripts/                          # 🧑‍💻 INTERNAL EXECUTION (CLI)
+│   ├── train.py
+│   ├── batch_predict.py
+│   └── backfill.py
+│
+├── configs/                          # ⚙️ ENVIRONMENT CONFIG FILES (DATA ONLY)
+│   ├── base/
+│   │   ├── training.yaml
+│   │   └── inference.yaml
+│   │
+│   ├── dev/
+│   │   ├── training.yaml
+│   │   └── inference.yaml
+│   │
+│   ├── prod/
+│   │   ├── training.yaml
+│   │   └── inference.yaml
+│   │
+│   └── staging/
+│       ├── training.yaml
+│       └── inference.yaml
+│
+├── artifacts/                        # 📦 MODEL OUTPUTS
+│   └── models/
+│       └── 2026-04-13/
+│           ├── model.pkl
+│           ├── metrics.json
+│           └── config.yaml
+│
+├── data/                             # 📊 RAW + PROCESSED DATA
+│   ├── raw/
+│   ├── interim/
+│   └── processed/
+│
+├── tests/                            # 🧪 TESTS
+│   ├── unit/
+│   ├── integration/
+│   └── fixtures/
+│
+├── notebooks/                        # 📓 EDA ONLY (NO PRODUCTION CODE)
+│   └── eda_credit_default.ipynb
+│
+├── deployment/                       # 🚀 DEPLOYMENT CONFIGS
+│   ├── docker/
+│   │   ├── Dockerfile.api
+│   │   └── Dockerfile.train
+│   ├── kubernetes/
+│   └── ci_cd/
+│
+├── pyproject.toml                   # 📦 PACKAGE DEFINITION
+├── requirements.txt
+├── requirements-api.txt
+└── README.md
