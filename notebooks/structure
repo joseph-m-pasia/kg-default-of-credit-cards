@@ -1,166 +1,112 @@
 my_ml_project/
-├── credit_default_ml/                      # 📦 CORE PACKAGE (installable)
+├── credit_default_ml/                 # 📦 CORE PYTHON PACKAGE (installable)
 │   ├── __init__.py
 │   │
-│   ├── data/                              # Data access & preprocessing
-│   │   ├── __init__.py
+│   ├── data/                          # Data ingestion + preprocessing
 │   │   ├── loaders/
-│   │   │   ├── csv_loader.py              # Load from CSV
-│   │   │   ├── db_loader.py               # Load from DB
-│   │   │   └── parquet_loader.py
-│   │   ├── validators/
-│   │   │   └── schema_validator.py        # Validate raw data
-│   │   └── preprocessors/
-│   │       ├── clean_data.py
-│   │       └── handle_missing.py
+│   │   ├── preprocessors/
+│   │   └── validators/
 │   │
-│   ├── features/                          # Feature engineering
-│   │   ├── __init__.py
+│   ├── features/                      # Feature engineering
 │   │   ├── transformers/
-│   │   │   ├── encoding.py                # Categorical encoding
-│   │   │   ├── scaling.py                 # Normalization/standardization
-│   │   │   └── binning.py
-│   │   ├── builders/
-│   │   │   └── build_features.py          # Combine all features
-│   │   └── pipelines/
-│   │       └── feature_pipeline.py        # Sklearn pipeline / custom pipeline
+│   │   └── feature_builder.py
 │   │
-│   ├── modeling/                          # Model-specific logic
-│   │   ├── __init__.py
+│   ├── modeling/                     # Model definitions + training logic
 │   │   ├── models/
-│   │   │   ├── sklearn_model.py
-│   │   │   ├── xgboost_model.py
-│   │   │   └── base_model.py              # Common interface
-│   │   ├── training/
-│   │   │   ├── trainer.py                # fit(), evaluate()
-│   │   │   ├── hyperparameter_tuning.py
-│   │   │   └── cross_validation.py
-│   │   ├── inference/
-│   │   │   └── predictor.py              # Raw prediction logic
-│   │   └── evaluation/
-│   │       ├── metrics.py                # AUC, accuracy, etc.
-│   │       └── plots.py
+│   │   ├── trainer.py
+│   │   ├── evaluator.py
+│   │   └── predictor.py
 │   │
-│   ├── pipelines/                         # End-to-end workflows
-│   │   ├── __init__.py
-│   │   ├── training/
-│   │   │   └── training_pipeline.py      # Full training flow
-│   │   ├── inference/
-│   │   │   ├── batch_pipeline.py         # Batch predictions
-│   │   │   └── online_pipeline.py        # Real-time predictions
-│   │   └── utils/
-│   │       └── pipeline_runner.py
+│   ├── pipelines/                    # End-to-end workflows
+│   │   ├── training_pipeline.py
+│   │   └── inference_pipeline.py
 │   │
-│   ├── services/                          # ⭐ CORE INTERFACE LAYER
-│   │   ├── __init__.py
-│   │   ├── inference_service.py          # predict(), load_model()
-│   │   ├── training_service.py           # trigger training (optional)
-│   │   └── model_registry_service.py     # load latest model, version mgmt
+│   ├── services/                     # ⭐ PUBLIC INTERFACE (MOST IMPORTANT)
+│   │   ├── inference_service.py      # predict(), load_model()
+│   │   └── training_service.py
 │   │
-│   ├── infrastructure/                    # External system interactions
-│   │   ├── __init__.py
-│   │   ├── storage/
-│   │   │   ├── s3_client.py
-│   │   │   ├── local_storage.py
-│   │   │   └── model_loader.py
-│   │   ├── database/
-│   │   │   └── db_client.py
-│   │   └── messaging/
-│   │       └── kafka_producer.py
+│   ├── config/                       # ⭐ SYSTEM CONFIGURATION (NOT utils)
+│   │   ├── config_paths.py           # ENV → config selection
+│   │   ├── settings.py               # environment variables
+│   │   ├── loader.py                 # YAML loading + merge logic
+│   │   └── merge.py                  # base + env merge
 │   │
-│   └── utils/                            # Shared utilities
-│       ├── __init__.py
-│       ├── config/
-│       │   ├── config_loader.py          # YAML/env loader
-│       │   └── settings.py               # Pydantic settings
+│   └── utils/                        # Helper functions (generic tools)
 │       ├── logging/
-│       │   └── logger.py
 │       ├── exceptions/
-│       │   └── custom_exceptions.py
 │       └── decorators/
-│           └── timing.py
 │
-├── api/                                  # 🌐 EXTERNAL INTERFACE
+├── api/                              # 🌐 FASTAPI (external interface)
 │   ├── v1/
 │   │   ├── routers/
-│   │   │   ├── predict.py                # /predict endpoint
-│   │   │   ├── health.py                 # /health check
-│   │   │   └── metadata.py               # model info/version
+│   │   │   ├── predict.py
+│   │   │   ├── health.py
+│   │   │   └── metadata.py
 │   │   │
 │   │   ├── schemas/
-│   │   │   ├── request.py                # Input schema
-│   │   │   └── response.py               # Output schema
+│   │   │   ├── request.py
+│   │   │   └── response.py
 │   │   │
-│   │   ├── dependencies/
-│   │   │   ├── model.py                  # Load model once
-│   │   │   ├── auth.py                   # API authentication
-│   │   │   └── rate_limiter.py
-│   │   │
-│   │   └── middleware/
-│   │       ├── logging.py
-│   │       └── error_handler.py
+│   │   └── dependencies/
+│   │       ├── model.py
+│   │       └── auth.py
 │   │
 │   ├── core/
-│   │   ├── config.py                     # API settings
-│   │   └── security.py                   # JWT/API keys
+│   │   ├── config.py                 # API-specific settings
+│   │   └── security.py               # auth, API keys
 │   │
-│   └── main.py                           # FastAPI app
+│   └── main.py                       # FastAPI entrypoint
 │
-├── scripts/                              # 🧑‍💻 INTERNAL EXECUTION
-│   ├── training/
-│   │   └── train_model.py
-│   ├── inference/
-│   │   └── batch_predict.py
-│   └── utils/
-│       └── backfill_predictions.py
+├── scripts/                          # 🧑‍💻 INTERNAL EXECUTION (CLI)
+│   ├── train.py
+│   ├── batch_predict.py
+│   └── backfill.py
 │
-├── artifacts/                            # 📦 MODEL OUTPUTS
-│   ├── models/
-│   │   ├── 2026-04-13/
-│   │   │   ├── model.pkl
-│   │   │   ├── metrics.json
-│   │   │   └── config.yaml
-│   │   └── latest -> 2026-04-13/         # symlink (optional)
+├── configs/                          # ⚙️ ENVIRONMENT CONFIG FILES (DATA ONLY)
+│   ├── base/
+│   │   ├── training.yaml
+│   │   └── inference.yaml
 │   │
-│   └── feature_store/                    # Optional
+│   ├── dev/
+│   │   ├── training.yaml
+│   │   └── inference.yaml
+│   │
+│   ├── prod/
+│   │   ├── training.yaml
+│   │   └── inference.yaml
+│   │
+│   └── staging/
+│       ├── training.yaml
+│       └── inference.yaml
 │
-├── data/                                 # 📊 DATA STORAGE
+├── artifacts/                        # 📦 MODEL OUTPUTS
+│   └── models/
+│       └── 2026-04-13/
+│           ├── model.pkl
+│           ├── metrics.json
+│           └── config.yaml
+│
+├── data/                             # 📊 RAW + PROCESSED DATA
 │   ├── raw/
 │   ├── interim/
 │   └── processed/
 │
-├── configs/                              # ⚙️ CONFIGURATION
-│   ├── base/
-│   │   ├── training.yaml
-│   │   └── inference.yaml
-│   ├── dev/
-│   ├── prod/
-│   └── logging.yaml
-│
-├── tests/                                # 🧪 TESTING
+├── tests/                            # 🧪 TESTS
 │   ├── unit/
-│   │   ├── modeling/
-│   │   ├── services/
-│   │   └── features/
 │   ├── integration/
-│   │   ├── pipelines/
-│   │   └── api/
 │   └── fixtures/
 │
-├── deployment/                           # 🚀 DEPLOYMENT
+├── notebooks/                        # 📓 EDA ONLY (NO PRODUCTION CODE)
+│   └── eda_credit_default.ipynb
+│
+├── deployment/                       # 🚀 DEPLOYMENT CONFIGS
 │   ├── docker/
 │   │   ├── Dockerfile.api
 │   │   └── Dockerfile.train
 │   ├── kubernetes/
-│   │   ├── deployment.yaml
-│   │   └── service.yaml
 │   └── ci_cd/
-│       └── github_actions.yaml
 │
-├── notebooks/                            # 📓 EDA ONLY
-│   └── eda_credit_default.ipynb
-│
-├── pyproject.toml                        # 📦 PACKAGE DEFINITION
+├── pyproject.toml                   # 📦 PACKAGE DEFINITION
 ├── requirements.txt
 ├── requirements-api.txt
 └── README.md
