@@ -11,14 +11,14 @@ my_ml_project/
 │   │   ├── transformers/
 │   │   └── feature_builder.py
 │   │
-│   ├── modeling/                     # Model definitions + training logic
+│   ├── modeling/                      # Model definitions + training logic
 │   │   ├── models/
 │   │   ├── trainer.py
 │   │   ├── evaluator.py
 │   │   └── predictor.py
 │   │
-│   ├── pipelines/                    # End-to-end workflows
-│   │   ├── training_pipeline.py
+│   ├── pipelines/                     # End-to-end workflows
+│   │   ├── training_pipeline.py       ## orchestrator that runs the entire training workflow end-to-end 
 │   │   └── inference_pipeline.py
 │   │
 │   ├── services/                     # ⭐ PUBLIC INTERFACE (MOST IMPORTANT)
