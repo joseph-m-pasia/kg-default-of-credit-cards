@@ -1,7 +1,7 @@
 # Load the raw data from the CSV file
 
 import pandas as pd
-from pkg_credit_default.utils import logger
+from pkg_credit_default.utils.logger import logger
 
 
 def load_data_from_csv(file_path):
@@ -21,6 +21,4 @@ def load_data_from_csv(file_path):
     except Exception as e:
         logger.error(f"An error occurred while loading the data: {e}")
         return None
-    
-    csv_data = load_data_from_csv('data/raw/credit_card_default.csv')       
     
