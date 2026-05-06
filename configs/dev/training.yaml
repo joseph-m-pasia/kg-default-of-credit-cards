@@ -1,4 +1,4 @@
 model:
-  name: "RandomForestRegressor"  # name of the model to train (e.g., RandomForestRegressor, XGBRegressor)
+  name: "LogisticRegression"  # name of the model to train (e.g., RandomForestRegressor, XGBRegressor)
   
 
