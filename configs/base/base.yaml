@@ -7,3 +7,6 @@ data:
   processed_path: "data/processed/"                          # folder to store cleaned/processed data    
   target_var:     "default.payment.next.month"               # target variable
   source: local
+  params:
+    n_months : 6                         # number of months to use as features (e.g., bill_amt1, bill_amt2, ..., bill_amt6)
+    
