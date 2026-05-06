@@ -2,7 +2,7 @@ from pkg_credit_default.config.config_loader import load_config
 from pkg_credit_default.data.loaders.raw_loader import load_data_from_csv
 from pkg_credit_default.utils.logger import logger
 from pkg_credit_default.features.feature_builder import create_new_features
-from pkg_credit_default.data.preprocessors.data_cleaning import clean_data
+from pkg_credit_default.data.preprocessors.data_cleaning import clean_data, remove_variables
     
 def run_training():
 
@@ -20,7 +20,12 @@ def run_training():
     # STEP 4: FEATURES
     df = create_new_features(df, config)
 
-    # STEP 5  : MODEL TRAINING
+    # STEP 5: REMOVE UNNCESSARY VARIABLES
+    df = remove_variables(df, config)
+
+    print(df.columns)
+
+    # STEP 6  : MODEL TRAINING
     # model = train_model(X, y, config)
 
     model = config
