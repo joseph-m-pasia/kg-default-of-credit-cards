@@ -1,12 +1,13 @@
 from pkg_credit_default.utils.logger import logger
-
+import pandas as pd
 
 # non-relevant - bill_amt, age
 def _calc_average_balance(df, nmonth):
     logger.info("Calculating average balance over the last {} months...".format(nmonth))
-    for i in range(1, nmonth + 1):
-        df[f'balance_{i}'] = df[f'BILL_AMT{i}'] - df[f'PAY_AMT{i}']
-    balance_vars = [f'balance_{i}' for i in range(1, nmonth + 1)]
+
+    balance_vars = pd.DataFrame(columns=[f"balance_{i}" for i in range(1, nmonth + 1)]) 
+    for i in range(1, nmonth + 1):          
+        balance_vars[f"balance_{i}"] = df[f'BILL_AMT{i}'] - df[f'PAY_AMT{i}']  # Calculate balance for each month
     df['AVG_BALANCE_'] = df[balance_vars].mean(axis=1)   
     return df
 
