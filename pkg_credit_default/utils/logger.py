@@ -3,7 +3,7 @@ import logging
 import sys
 
 # Create a reusable logger
-logger = logging.getLogger("house_prices")  # project-wide name
+logger = logging.getLogger("CREDIT_CARDS_DEFAULT")  # project-wide name
 logger.setLevel(logging.INFO)  # default level, can change to DEBUG
 
 # Prevent adding multiple handlers if logger is imported multiple times
