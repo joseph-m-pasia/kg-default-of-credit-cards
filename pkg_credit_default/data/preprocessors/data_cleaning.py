@@ -10,7 +10,7 @@ def clean_data(df):
 def remove_variables(df, config):
     logger.info("Removing unnecessary variables...")
 
-    target_var = config["data"]["target_var"]
     x_vars = config["data"]["x_vars"]
-    X = df.drop(columns=[target_var] + x_vars)  # Drop target variable and specified variables
+    X = df.drop(columns= x_vars)  # Drop target variable and specified variables
+
     return X
