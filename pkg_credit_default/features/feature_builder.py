@@ -49,7 +49,7 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
         
     def _calc_late_payment_M1(self, X):
         logger.info("Calculating late payment indicator for M1...")
-        
+
         # Define late payment indicator as 1 if the payment in M1 (PAY_1) is late, else 0
         X['LATE_PAYMENT_M1_'] = (X['PAY_1'] > 0).astype(int)
         
@@ -58,7 +58,6 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
 
 
 if __name__ == "__main__":
-    print("Hello, World!")
     df = pd.DataFrame({
         "BILL_AMT1": [100, 200],
         "PAY_AMT1": [20, 50],
