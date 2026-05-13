@@ -19,9 +19,9 @@ from sklearn.model_selection import GridSearchCV
 import importlib
 from typing import Any, Dict
 
-def get_model_class_and_params(config: Dict, model_type: str):
+def get_model_class_and_params(config: Dict, model_type: str, save_model: bool = True):
     """
-    Load the model class dynbreakamically from config.
+    Load the model class dynamically from config.
     """
     logger.info(f"Loading model class and parameters for '{model_type}' from config...")
     
@@ -40,7 +40,8 @@ def get_model_class_and_params(config: Dict, model_type: str):
     return ModelClass, params, model_config
 
 
-def train_model(X_train, y_train, config, model_type="logistic_regression" ):
+def train_model(X_train, y_train, config, model_type="logistic_regression", save_model = True):
+
 
     logger.info(f"Training {model_type} model...")
 
@@ -89,14 +90,15 @@ def train_model(X_train, y_train, config, model_type="logistic_regression" ):
     logger.info(f"Best Parameters  : {grid_search.best_params_}")
       
     # ==================== Save Model ====================
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")    
-    model_dir = os.path.join(config["paths"]["output_dir_models"], timestamp)
-    os.makedirs(model_dir, exist_ok=True)                    # create folder if it doesn't exist
+    if save_model:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")    
+        model_dir = os.path.join(config["paths"]["output_dir_models"], timestamp)
+        os.makedirs(model_dir, exist_ok=True)                    # create folder if it doesn't exist
 
-    model_path = os.path.join(model_dir, f"{model_type}_model.pkl")
-    joblib.dump(best_model, model_path)
+        model_path = os.path.join(model_dir, f"{model_type}_model.pkl")
+        joblib.dump(best_model, model_path)
   
-    logger.info(f"Best model saved to {model_path}")
+        logger.info(f"Best model saved to {model_path}")
   
     return {
         "model": best_model,
