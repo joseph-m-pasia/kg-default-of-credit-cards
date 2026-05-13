@@ -57,9 +57,9 @@ def train_model(X_train, y_train, config, model_type="logistic_regression" ):
 
     # ======================= Create Pipeline =======================
     pipeline = Pipeline(steps=[
+        ("feature_engineering", FeatureEngineering(n_months=6)),  # Add feature engineering step
         ("imputer", SimpleImputer(strategy="median")),            # Handle missing values
         ("scaler", StandardScaler()),                             # Scale features
-        ("feature_engineering", FeatureEngineering(n_months=6)),  # Add feature engineering step
         ("model", regressor)                                      # Add the model
     ])
 
@@ -76,7 +76,7 @@ def train_model(X_train, y_train, config, model_type="logistic_regression" ):
                                n_jobs=config["gridCV"]["n_jobs"], 
                                verbose=config["gridCV"]["verbose"]
                                )
-    
+
     grid_search.fit(X_train, y_train)
     logger.info("Model training completed.")
 
@@ -90,7 +90,7 @@ def train_model(X_train, y_train, config, model_type="logistic_regression" ):
       
     # ==================== Save Model ====================
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")    
-    model_dir = os.path.join(config["models"]["output_dir_models"], timestamp)
+    model_dir = os.path.join(config["paths"]["output_dir_models"], timestamp)
     os.makedirs(model_dir, exist_ok=True)                    # create folder if it doesn't exist
 
     model_path = os.path.join(model_dir, f"{model_type}_model.pkl")
@@ -109,6 +109,10 @@ def train_model(X_train, y_train, config, model_type="logistic_regression" ):
 
 ############### RUN TRAINING PIPELINE ###############
 if __name__ == "__main__":
+
+    # STEP 0: SELECT MODEL TYPE
+    model_type = "xgb_regressor"  # Change this to select different model (e.g. "logistic_regression", "random_forest", "xgb_regressor")
+
     # STEP 1: CONFIG
     config = load_config()
 
@@ -126,5 +130,5 @@ if __name__ == "__main__":
     X_train = df.drop(config["data"]["target_variable"], axis=1)
     y_train = df[config["data"]["target_variable"]]
 
-    model_results = train_model(X_train, y_train, config, model_type="logistic_regression")
+    model_results = train_model(X_train, y_train, config, model_type=model_type)
 
