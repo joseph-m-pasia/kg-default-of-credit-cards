@@ -3,7 +3,7 @@ from pkg_credit_default.config.config_loader    import load_config
 from pkg_credit_default.data.raw_loader         import load_data_from_csv
 from pkg_credit_default.data.data_cleaning      import clean_data, remove_variables
 from pkg_credit_default.data.data_preparation   import prepare_data
-from pkg_credit_default.modeling.training_model import train_model
+from pkg_credit_default.modeling.trainer        import train_model
 from pkg_credit_default.utils.logger            import logger
    
 from sklearn.model_selection import train_test_split
@@ -38,7 +38,10 @@ def run_training_pipeline(model_type = ['logistic_regression'], save_output = Tr
         best_models[model] = train_model(X_train, y_train, config, model_type=model, save_output=save_output)
 
     # PHASE 3 - Evaluate the model on the test set (if needed)
-
+    
+    
+    # This can be implemented as needed, e.g. by adding an "evaluate_model" function that takes the best model and test data as input and logs the evaluation results.
+    
 
     # PHASE 4 - Select the champion model and save it (if needed)
     
