@@ -82,22 +82,28 @@ def train_model(X_train, y_train, config, model_type="logistic_regression", save
 
     # ======================= Grid Search =======================
     logger.info("Performing GridSearchCV...")
-    
+
+    metric = config["selection"]["primary_metric"] 
     grid_search = GridSearchCV(estimator=pipeline, 
                                param_grid=param_grid, 
                                cv=config["gridCV"]["cv"], 
                                n_jobs=config["gridCV"]["n_jobs"], 
-                               verbose=config["gridCV"]["verbose"]
-                               )
-
+                               verbose=config["gridCV"]["verbose"],
+                               scoring=config["metrics"],
+                               refit=metric)
+    
     grid_search.fit(X_train, y_train)
     logger.info("Model training completed.")
 
     best_model = grid_search.best_estimator_
     
     # ======================= Logging Results =======================
+
+    best_idx = grid_search.best_index_
+    std_score = grid_search.cv_results_[f"std_test_{metric}"][best_idx]
+
     logger.info(f"Best CV Score    : {grid_search.best_score_:.4f}")
-    logger.info(f"CV Score Std Dev : {grid_search.cv_results_['std_test_score'][grid_search.best_index_]:.4f}")
+    logger.info(f"CV Score Std Dev : {std_score:.4f}")
     logger.info(f"Training Score   : {best_model.score(X_train, y_train):.4f}")
     logger.info(f"Best Parameters  : {grid_search.best_params_}")
       
