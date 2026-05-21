@@ -4,6 +4,7 @@ from pkg_credit_default.data.raw_loader         import load_data_from_csv
 from pkg_credit_default.data.data_cleaning      import clean_data, remove_variables
 from pkg_credit_default.data.data_preparation   import prepare_data
 from pkg_credit_default.modeling.trainer        import train_model
+from pkg_credit_default.modeling.evaluator      import evaluate_model, select_champion_model
 from pkg_credit_default.utils.logger            import logger
    
 from sklearn.model_selection import train_test_split
@@ -11,8 +12,20 @@ from sklearn.model_selection import train_test_split
 # ========================================================= 
 # =================== TRAINING PIPELINE =================== 
 # ========================================================= 
+        
 
-def run_training_pipeline(model_type = ['logistic_regression'], save_output = True):
+def run_training_pipeline(model_type = ['logistic_regression'], params={}):
+
+    """
+    Run the full training pipeline: data loading, cleaning, preparation, model training, evaluation, and saving.
+    Input:
+        model_type: list of model types to train (e.g. ["logistic_regression", "random_forest", "xgb_regressor", "knn", "svm", "lightgbm"])
+        params:     dict of additional parameters (e.g. {"save_output": True, "plot_metrics": False})
+    """
+
+    # initialize the parameters
+    save_output = params.get("save_output", True)
+    plot_metrics = params.get("plot_metrics", False)
 
     logger.info("Starting training pipeline...")
 
@@ -32,24 +45,36 @@ def run_training_pipeline(model_type = ['logistic_regression'], save_output = Tr
                                                         random_state=config["data"]["random_state"])
     
     # STEP 3 - Build and train the model
-    best_models = {}
+    best_models = {} 
     for model in model_type:
         logger.info(f"Training {model}...")
         best_models[model] = train_model(X_train, y_train, config, model_type=model, save_output=save_output)
 
-    # PHASE 3 - Evaluate the model on the test set (if needed)
-    
-    
-    # This can be implemented as needed, e.g. by adding an "evaluate_model" function that takes the best model and test data as input and logs the evaluation results.
-    
+    # STEP 4 - Evaluate the model on the test set (if needed)
+    score_results = {}
+    for model in model_type:
+        logger.info(f"Evaluating {model}...")
+        score_results[model] = evaluate_model(best_models[model]["model"], X_test, y_test)
+        
+    # STEP 5 - Select the champion model and save it (if needed)
+    # For each metric, return the models by performance - print and plot
+    champion_model = {}
+    for metric in ["accuracy", "precision", "recall", "f1_score", "roc_auc"]:
+        champion_model[metric] = select_champion_model(score_results, metric=metric, plot_metrics=plot_metrics)
 
-    # PHASE 4 - Select the champion model and save it (if needed)
+    logger.info("Training pipeline completed.")
+    return {
+        "best_models": best_models,
+        "score_results": score_results,
+        "champion_model": champion_model
+    }    
     
-    
-####################### LAUNCH THE TRAINING PIPELINE ############################    
+####################### EXAMPLE USAGE ############################    
 
 if __name__ == "__main__":
-    #list_of_models = ["logistic_regression", "random_forest", "xgb_regressor", "knn", "svm", "lightgbm"]
-    list_of_models = ["knn", "svm", "lightgbm"]
+    #list_of_models = ["logistic_regression", "random_forest", "xgb_regressor", "knn", "lightgbm"]
+    list_of_models = ["logistic_regression", "random_forest"]
     
-    run_training_pipeline(model_type=list_of_models)   
+    champion_model = run_training_pipeline(model_type=list_of_models, params={"save_output": True, "plot_metrics": True})   
+    final_model = champion_model["f1_score"]  # Get the champion model based on F1 score
+    logger.info(f"Champion model based on F1 score: {final_model[0]} with F1 score = {final_model[1]['f1_score']:.4f}")
