@@ -48,23 +48,29 @@ def run_training_pipeline(model_type = ['logistic_regression'], params={}):
     best_models = {} 
     for model in model_type:
         logger.info(f"Training {model}...")
-        best_models[model] = train_model(X_train, y_train, config, model_type=model, save_output=save_output)
+        best_models[model] = train_model(X_train, 
+                                         y_train, 
+                                         config, 
+                                         model_type=model, 
+                                         save_output=save_output)
 
     # STEP 4 - Evaluate the model on the test set (if needed)
     score_results = {}
     for model in model_type:
         logger.info(f"Evaluating {model}...")
-        score_results[model] = evaluate_model(best_models[model]["model"], X_test, y_test)
-        
-    # STEP 5 - Select the champion model and save it (if needed)
-    # For each metric, return the models by performance - print and plot
-    champion_model = {}
-    for metric in ["accuracy", "precision", "recall", "f1_score", "roc_auc"]:
-        champion_model[metric] = select_champion_model(score_results, metric=metric, plot_metrics=plot_metrics)
+        score_results[model] = evaluate_model(best_models[model]["model"], 
+                                              X_test, 
+                                              y_test)
+    # STEP 5 - Select the champion model and save it (if needed) based on the metric specified in GridSearchCV config
+    score_models = {model: scores[config["selection"]["primary_metric"]] for model, scores in score_results.items()}
+    score_models = sorted(score_models.items(), key=lambda x: x[1], reverse=True)
+    champion_model = select_champion_model(score_models, 
+                                           metric=config["selection"]["primary_metric"], 
+                                           plot_metrics=plot_metrics)
 
     logger.info("Training pipeline completed.")
     return {
-        "best_models": best_models,
+        "best_models": best_models,   
         "score_results": score_results,
         "champion_model": champion_model
     }    
@@ -73,8 +79,7 @@ def run_training_pipeline(model_type = ['logistic_regression'], params={}):
 
 if __name__ == "__main__":
     #list_of_models = ["logistic_regression", "random_forest", "xgb_regressor", "knn", "lightgbm"]
-    list_of_models = ["logistic_regression", "random_forest"]
+    list_of_models = ["logistic_regression","xgb_regressor"]
     
     champion_model = run_training_pipeline(model_type=list_of_models, params={"save_output": True, "plot_metrics": True})   
-    final_model = champion_model["f1_score"]  # Get the champion model based on F1 score
-    logger.info(f"Champion model based on F1 score: {final_model[0]} with F1 score = {final_model[1]['f1_score']:.4f}")
+    logger.info(f"Champion model based on F1 score: {champion_model['champion_model'][0]} with F1 score = {champion_model['champion_model'][1]:.4f}")
