@@ -78,8 +78,7 @@ def run_training_pipeline(model_type = ['logistic_regression'], params={}):
 ####################### EXAMPLE USAGE ############################    
 
 if __name__ == "__main__":
-    #list_of_models = ["logistic_regression", "random_forest", "xgb_regressor", "knn", "lightgbm"]
-    list_of_models = ["logistic_regression","xgb_regressor"]
+    list_of_models = ["logistic_regression", "random_forest", "xgb_regressor", "knn", "lightgbm"]
     
     champion_model = run_training_pipeline(model_type=list_of_models, params={"save_output": True, "plot_metrics": True})   
     logger.info(f"Champion model based on F1 score: {champion_model['champion_model'][0]} with F1 score = {champion_model['champion_model'][1]:.4f}")
