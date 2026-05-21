@@ -28,7 +28,7 @@ models:
       model__class_weight: [null, "balanced"]
 
   xgb_regressor:
-    class: "xgboost.XGBRegressor"
+    class: "xgboost.XGBClassifier"   # or XGBRegressor
     params:
       n_estimators: 100
       learning_rate: 0.1
@@ -57,7 +57,7 @@ models:
       model__algorithm: ["auto", "ball_tree", "kd_tree", "brute"]
   
   lightgbm:
-    class: "lightgbm.LGBMRegressor"
+    class: "lightgbm.LGBMClassifier"   # or LGBMRegressor
     params:
       random_state: 42
     param_grid:
@@ -68,9 +68,7 @@ models:
   svm:
     class: "sklearn.svm.SVC"   # or SVR
     params:
-      C: 1.0
-      kernel: "rbf"
       random_state: 42
+      kernel: "linear"
     param_grid:
       model__C: [0.1, 1, 10, 100]
-      model__kernel: ["linear", "rbf", "poly"] 
