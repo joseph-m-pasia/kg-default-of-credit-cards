@@ -110,8 +110,8 @@ def train_model(X_train, y_train, config, model_type="logistic_regression", save
         "model": best_model,
         "best_score": grid_search.best_score_,
         "best_params": grid_search.best_params_,
-        "model_dir": model_dir,
-        "model_path": model_path,
+        "model_dir": model_dir if save_output else None,
+        "model_path": model_path if save_output else None,
         "grid_search": grid_search
     }
 
