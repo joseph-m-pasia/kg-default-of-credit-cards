@@ -3,7 +3,7 @@ paths:
   output_dir_models: "artifacts/models"  # directory where the trained model will be saved
   output_dir_data: "data/processed"  # directory where the processed data will be saved
 
-# ====================== Data ======================
+# ====================== Data =============================
 data:
   test_size: 0.2
   random_state: 42
@@ -13,6 +13,21 @@ gridCV:
   cv: 5
   n_jobs: -1
   verbose: 0
+
+metrics:
+  roc_auc: roc_auc
+  f1_score: f1
+  precision: precision
+  recall: recall
+  accuracy: accuracy
+
+selection:
+  primary_metric: f1_score     # used for choosing model
+  secondary_metrics:
+    - f1_score
+    - precision
+    - recall
+
 
 # ====================== Model Registry ======================
 models:
