@@ -1,6 +1,7 @@
 from pkg_credit_default.utils.logger import logger
 from sklearn.base import BaseEstimator, TransformerMixin
 import pandas as pd
+import numpy as np
 
 
 class FeatureEngineering(BaseEstimator, TransformerMixin):
@@ -32,9 +33,11 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
     def _calc_average_balance(self, X):
         logger.info("Calculating average balance over the last {} months...".format(self.n_months))
 
-        balance_vars = pd.DataFrame(columns=[f"balance_{i}" for i in range(1, self.n_months + 1)]) 
-        for i in range(1, self.n_months + 1):          
-            balance_vars[f"balance_{i}"] = X[f'BILL_AMT{i}'] - X[f'PAY_AMT{i}']  # Calculate balance for each month
+        balance_vars = pd.DataFrame({
+            f"balance_{i}": X[f'BILL_AMT{i}'] - X[f'PAY_AMT{i}']
+            for i in range(1, self.n_months + 1)
+        })  # Calculate balance for each month
+
         X['AVG_BALANCE_'] = balance_vars.mean(axis=1)   
 
         return X
@@ -43,7 +46,7 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
         logger.info("Calculating credit utilization...")
         
         # Define credit utilization ratio as average balance divided by credit limit (LIMIT_BAL)
-        X['CREDIT_UTILIZATION_'] = X['AVG_BALANCE_'] / X['LIMIT_BAL']
+        X['CREDIT_UTILIZATION_'] = X['AVG_BALANCE_'] / X['LIMIT_BAL'].replace(0, np.nan)
         
         return X
         
