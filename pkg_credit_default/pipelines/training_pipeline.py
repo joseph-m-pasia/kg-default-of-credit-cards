@@ -6,6 +6,7 @@ from pkg_credit_default.data.data_preparation   import prepare_data
 from pkg_credit_default.modeling.trainer        import train_model
 from pkg_credit_default.modeling.evaluator      import evaluate_model, select_champion_model
 from pkg_credit_default.utils.logger            import logger
+from pkg_credit_default.utils.utils             import save_model
    
 from sklearn.model_selection import train_test_split
 
@@ -14,7 +15,7 @@ from sklearn.model_selection import train_test_split
 # ========================================================= 
         
 
-def run_training_pipeline(model_type = ['logistic_regression'], params={}):
+def run_training_pipeline(model_type: list = ['logistic_regression'], params: dict = {}):
 
     """
     Run the full training pipeline: data loading, cleaning, preparation, model training, evaluation, and saving.
@@ -54,31 +55,31 @@ def run_training_pipeline(model_type = ['logistic_regression'], params={}):
                                          model_type=model, 
                                          save_output=save_output)
 
-    # STEP 4 - Evaluate the model on the test set (if needed)
-    score_results = {}
-    for model in model_type:
-        logger.info(f"Evaluating {model}...")
-        score_results[model] = evaluate_model(best_models[model]["model"], 
-                                              X_test, 
-                                              y_test)
-    # STEP 5 - Select the champion model and save it (if needed) based on the metric specified in GridSearchCV config
-    score_models = {model: scores[config["selection"]["primary_metric"]] for model, scores in score_results.items()}
-    score_models = sorted(score_models.items(), key=lambda x: x[1], reverse=True)
-    champion_model = select_champion_model(score_models, 
-                                           metric=config["selection"]["primary_metric"], 
-                                           plot_metrics=plot_metrics)
+    # STEP 4 - Select the champion model and save it (if needed) based on the metric specified in GridSearchCV config
+    best_model_name, best_model_info = max(best_models.items(),     
+                                           key=lambda item: item[1]["best_score"])
+    champion_model = (best_model_name, best_model_info)
+    model_dir = config["paths"]["output_dir_models"]
+    model_path = save_model(champion_model, model_dir, f"champion_{best_model_name}", timestamp=True)
+
+    # STEP 5 - Evaluate the model on the test set (if needed)
+#    score_results = {}
+#    for model in model_type:
+#        logger.info(f"Evaluating {model}...")
+#        score_results[model] = evaluate_model(best_models[model]["model"], 
+#                                              X_test, 
+#                                              y_test)
 
     logger.info("Training pipeline completed.")
     return {
         "best_models": best_models,   
-        "score_results": score_results,
         "champion_model": champion_model
     }    
     
 ####################### EXAMPLE USAGE ############################    
 
 if __name__ == "__main__":
-    list_of_models = ["logistic_regression", "random_forest", "xgb_regressor", "knn", "lightgbm"]
+    list_of_models = ["logistic_regression", "random_forest"] # "xgb_regressor", "knn", "lightgbm"]
     
-    champion_model = run_training_pipeline(model_type=list_of_models, params={"save_output": True, "plot_metrics": True})   
-    logger.info(f"Champion model based on F1 score: {champion_model['champion_model'][0]} with F1 score = {champion_model['champion_model'][1]:.4f}")
+    champion_model = run_training_pipeline(model_type=list_of_models, params={"save_output": False, "plot_metrics": True})               
+    logger.info(f"Champion model based on F1 score: {champion_model['champion_model'][0]} with F1 score = {champion_model['champion_model'][1]['best_score']:.4f}")
