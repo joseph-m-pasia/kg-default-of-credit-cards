@@ -59,6 +59,7 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
         return X 
         
 
+####################### EXAMPLE USAGE ############################    
 
 if __name__ == "__main__":
     df = pd.DataFrame({
