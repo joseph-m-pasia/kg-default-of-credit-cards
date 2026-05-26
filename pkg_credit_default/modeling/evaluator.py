@@ -1,9 +1,15 @@
+from logging import config
+
+from fastapi import params
+from typing import Dict
+import numpy as np
+
 from pkg_credit_default.utils.logger      import logger
 from pkg_credit_default.modeling.plotter  import plot_metric_comparison
 
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 
-def evaluate_model(model, X_test, y_test):
+def evaluate_model(model, X_test: np.ndarray, y_test: np.ndarray) -> Dict[str, float]:
     """
     Evaluate the trained model on the test set and log the results.
     """
@@ -32,14 +38,14 @@ def evaluate_model(model, X_test, y_test):
         "roc_auc": roc_auc
     }
 
-def select_champion_model(score_results, metric="f1_score", plot_metrics=False):
+def select_champion_model(score_results: list, metric: str = "f1_score", plot_metrics: bool = False) -> tuple:
 
     """
     Select the champion model based on the specified metric and optionally plot the comparison.
     Input:
         score_results: list of tuples, e.g. [('random_forest', 0.82), ('logistic_regression', 0.80)]
         metric:        the specific metric to compare (e.g. "accuracy", "precision", "recall", "f1_score", "roc_auc")
-        plot_metrics:  whether to plot the metric comparison across models
+        plot_metrics:  boolean indicating whether to plot the metric comparison across models
     """
 
     logger.info(f"Selecting champion model based on {metric}...")
@@ -53,8 +59,10 @@ def select_champion_model(score_results, metric="f1_score", plot_metrics=False):
 
     champion_model = max(score_results, key=lambda x: x[1])
     logger.info(f"Champion model based on {metric}: {champion_model[0]} with {metric} = {champion_model[1]:.4f}")
-    
+
     return champion_model
+
+
 
 #========= EXAMPLE USAGE =========
 if __name__ == "__main__":
@@ -81,4 +89,4 @@ if __name__ == "__main__":
     # Select champion model example
     score_results = [("random_forest", 0.82), ("logistic_regression", 0.80), ("xgb_regressor", 0.85),   ("knn", 0.78), ("lightgbm", 0.83)]
 
-    select_champion_model(score_results, metric="f1_score", plot_metrics=True)  
+    select_champion_model(score_results, metric="f1_score", plot_metrics=False)  
