@@ -9,7 +9,7 @@ def prepare_data(config):
     logger.info("Preparing data for modeling...")
 
     # STEP 1: RAW DATA
-    df = load_data_from_csv(config["data"]["raw_path"])
+    df = load_data_from_csv(config["data"]["raw_path"], config["data"]["features"] + [config["data"]["target_variable"]])
 
     # STEP 2: DATA CLEANING
     df = clean_data(df)
