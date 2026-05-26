@@ -12,6 +12,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.model_selection import GridSearchCV
 
 import importlib
+from joblib import Memory
 from typing import Any, Dict
 
 def get_model_class_and_params(config: Dict, model_type: str, save_model: bool = True): 
@@ -50,12 +51,13 @@ def train_model(X_train, y_train, config, model_type="logistic_regression", save
     param_grid = model_config.get("param_grid", {})
 
     # ======================= Create Pipeline =======================
+    memory = Memory(location="cache/sklearn", verbose=10)
     pipeline = Pipeline(steps=[
         ("feature_engineering", FeatureEngineering(n_months=6)),  # Add feature engineering step
         ("imputer", SimpleImputer(strategy="median")),            # Handle missing values
         ("scaler", StandardScaler()),                             # Scale features
         ("model", regressor)                                      # Add the model
-    ])
+    ], memory=memory)  # Cache intermediate results to speed up GridSearchCV
 
     logger.info("Pipeline steps:")
     for name, step in pipeline.steps:
@@ -74,7 +76,7 @@ def train_model(X_train, y_train, config, model_type="logistic_regression", save
                                refit=metric)
     
     grid_search.fit(X_train, y_train)
-    logger.info("Model training completed.")
+    logger.info(f"Model training of {model_type} completed.")
 
     best_model = grid_search.best_estimator_
     
@@ -83,10 +85,10 @@ def train_model(X_train, y_train, config, model_type="logistic_regression", save
     best_idx = grid_search.best_index_
     std_score = grid_search.cv_results_[f"std_test_{metric}"][best_idx]
 
-    logger.info(f"Best CV Score    : {grid_search.best_score_:.4f}")
-    logger.info(f"CV Score Std Dev : {std_score:.4f}")
-    logger.info(f"Training Score   : {best_model.score(X_train, y_train):.4f}")
-    logger.info(f"Best Parameters  : {grid_search.best_params_}")
+    logger.info(f"Best CV Score ({metric})    : {grid_search.best_score_:.4f}")
+    logger.info(f"CV Score Std Dev ({metric}) : {std_score:.4f}")
+    logger.info(f"Training Score ({metric})   : {best_model.score(X_train, y_train):.4f}")
+    logger.info(f"Best Parameters             : {grid_search.best_params_}")
       
     # ======================= Save Model ============================
     if save_output:
