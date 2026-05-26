@@ -1,9 +1,8 @@
-from datetime import datetime
-import os
 from pyexpat import model 
 import joblib
 
 from pkg_credit_default.utils.logger import logger
+from pkg_credit_default.utils.utils import save_model
 from pkg_credit_default.features.feature_builder import FeatureEngineering
 
 from sklearn.model_selection import cross_val_score
@@ -15,7 +14,7 @@ from sklearn.model_selection import GridSearchCV
 import importlib
 from typing import Any, Dict
 
-def get_model_class_and_params(config: Dict, model_type: str, save_model: bool = True):
+def get_model_class_and_params(config: Dict, model_type: str, save_model: bool = True): 
     """
     Load the model class dyna mically from config.
     """
@@ -35,25 +34,7 @@ def get_model_class_and_params(config: Dict, model_type: str, save_model: bool =
 
     return ModelClass, params, model_config
 
-def save_model(model, model_dir, model_type="", timestamp=True):
-    """
-    Save the trained model to disk.
-    """
-    logger.info(f"Saving model '{model_type}' to disk...")
-
-    tstamp = datetime.now().strftime("%Y%m%d_%H%M%S") if timestamp else ""
-
-    model_dir = os.path.join(model_dir, tstamp + f"_{model_type}")  # e.g. "outputs/models/20240101_120000_logistic_regression"
-    os.makedirs(model_dir, exist_ok=True)                           # create folder if it doesn't exist
-
-    model_path = os.path.join(model_dir, f"{model_type}_model.pkl")
-    joblib.dump(model, model_path)
-  
-    logger.info(f"Model saved to {model_path}")
-
-    return model_path    
-
-def train_model(X_train, y_train, config, model_type="logistic_regression", save_output = True):
+def train_model(X_train, y_train, config, model_type="logistic_regression", save_output = True) -> Dict[str, Any]:
 
     logger.info(f"Training {model_type} model...")
 
@@ -120,29 +101,4 @@ def train_model(X_train, y_train, config, model_type="logistic_regression", save
         "model_path": model_path if save_output else None,
         "grid_search": grid_search
     }
-
-############### RUN TRAINING PIPELINE ###############
-if __name__ == "__main__":
-
-    # STEP 0: SELECT MODEL TYPE
-    model_type = "xgb_regressor"  # Change this to select different model (e.g. "logistic_regression", "random_forest", "xgb_regressor")
-
-    # STEP 1: CONFIG
-    config = load_config()
-
-    # STEP 2: RAW DATA
-    df = load_data_from_csv(config["data"]["raw_path"])
-
-    # STEP 3: DATA CLEANING
-    df = clean_data(df)
-
-    # STEP 5: REMOVE VARIABLES
-    df = remove_variables(df, config)
-
-    print(df.columns)
-
-    X_train = df.drop(config["data"]["target_variable"], axis=1)
-    y_train = df[config["data"]["target_variable"]]
-
-    model_results = train_model(X_train, y_train, config, model_type=model_type)
 
