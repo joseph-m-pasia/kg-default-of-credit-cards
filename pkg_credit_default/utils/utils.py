@@ -26,3 +26,19 @@ def save_model(model, model_dir, model_type="", timestamp=True) -> str:
     logger.info(f"Model saved to {model_path}")
 
     return model_path  
+
+def load_ml_model(model_path: str = None):
+    """
+    Load a trained ML model from disk.
+    Asumes the model is saved as a .pkl file using joblib.
+    Args:    model_path (str): The path to the saved model file.
+    Returns: The loaded model object, or None if the file does not exist.
+    """
+    logger.info("Loading model and its metrics...")
+ 
+    if os.path.exists(model_path):
+        ml_model = joblib.load(model_path)
+        return ml_model
+    else:
+        logger.warning(f"Model not found at {model_path}. Returning None.")
+        return None
