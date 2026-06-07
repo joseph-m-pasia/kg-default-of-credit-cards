@@ -12,6 +12,11 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 def evaluate_model(model, X_test: np.ndarray, y_test: np.ndarray) -> Dict[str, float]:
     """
     Evaluate the trained model on the test set and log the results.
+    Assuming a binary classification problem, this function computes accuracy, precision, recall, F1 score, and ROC AUC score.
+    Input:
+        model:      the trained model to evaluate
+        X_test:     the test features
+        y_test:     the test labels
     """
     logger.info("Evaluating model on the test set...")
 
@@ -35,7 +40,9 @@ def evaluate_model(model, X_test: np.ndarray, y_test: np.ndarray) -> Dict[str, f
         "precision": precision,
         "recall": recall,
         "f1_score": f1,
-        "roc_auc": roc_auc
+        "roc_auc": roc_auc,
+        "y_pred": y_pred,
+        "y_proba": y_proba
     }
 
 def select_champion_model(score_results: list, metric: str = "f1_score", plot_metrics: bool = False) -> tuple:
@@ -84,7 +91,8 @@ if __name__ == "__main__":
     model.fit(X_train, y_train)
 
     # Evaluate the model
-    evaluate_model(model, X_test, y_test)
+    test = evaluate_model(model, X_test, y_test)
+    print(test)
 
     # Select champion model example
     score_results = [("random_forest", 0.82), ("logistic_regression", 0.80), ("xgb_regressor", 0.85),   ("knn", 0.78), ("lightgbm", 0.83)]
