@@ -96,7 +96,10 @@ def run_training_pipeline(model_type: list = ['logistic_regression'], params: di
 ####################### EXAMPLE USAGE ############################    
 
 if __name__ == "__main__":
-    list_of_models = ["logistic_regression", "random_forest"] # "xgb_regressor", "knn", "lightgbm"]
+    list_of_models = ["logistic_regression"] # "xgb_regressor", "knn", "lightgbm"]
     
-    champion_model = run_training_pipeline(model_type=list_of_models, params={"save_output": False, "plot_metrics": True, "save_split_data": True})               
+    champion_model = run_training_pipeline(model_type = list_of_models, 
+                                           params     = {"save_output": False, 
+                                                         "plot_metrics": True, 
+                                                         "save_split_data": True})               
     logger.info(f"Champion   model based on F1 score: {champion_model['champion_model'][0]} with F1 score = {champion_model['champion_model'][1]['best_score']:.4f}")

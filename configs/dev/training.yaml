@@ -1,7 +1,7 @@
 # ====================== Directories ======================
 paths:
   output_dir_models: "artifacts/models"  # directory where the trained model will be saved
-  output_dir_data: "data/processed"  # directory where the processed data will be saved
+  output_dir_data: "data/processed"  # directory where the processed and split data will be saved
 
 # ====================== Data =============================
 data:
