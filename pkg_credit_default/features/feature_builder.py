@@ -1,3 +1,5 @@
+from transformers import pipeline
+
 from pkg_credit_default.utils.logger import logger
 from sklearn.base import BaseEstimator, TransformerMixin
 import pandas as pd
@@ -28,6 +30,7 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
         X = self._calc_credit_utilization(X)
         X = self._calc_late_payment_M1(X)
 
+        self.feature_names_out_ = X.columns.tolist()
         return X
     
     def _calc_average_balance(self, X):
@@ -58,6 +61,8 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
         
         return X 
         
+    def get_feature_names_out(self, input_features=None):
+        return self.feature_names_out_
 
 ####################### EXAMPLE USAGE ############################    
 
@@ -71,4 +76,3 @@ if __name__ == "__main__":
     })
     fe = FeatureEngineering(n_months=1)
     df_transformed = fe._calc_average_balance(df.drop(columns=["target"]))
-    print(df_transformed.head())
