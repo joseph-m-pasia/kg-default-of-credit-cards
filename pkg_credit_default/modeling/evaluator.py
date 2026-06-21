@@ -66,9 +66,10 @@ def select_champion_model(score_results: list, metric: str = "f1_score", plot_me
 
     return champion_model
 
+# =====================================
+# EXAMPLE USAGE
+# =====================================
 
-
-#========= EXAMPLE USAGE =========
 if __name__ == "__main__":
     """ 
     This is just an example of how to use the evaluate_model function.
