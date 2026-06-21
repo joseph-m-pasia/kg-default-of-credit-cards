@@ -7,17 +7,17 @@ from pkg_credit_default.utils.logger import logger
 def load_data_from_csv(file_path, expected_columns=None) -> pd.DataFrame:
     """
     Load data from a CSV file into a pandas DataFrame.
-    
+
     Parameters:
     file_path (str): The path to the CSV file.
-    
+
     Returns:
     pd.DataFrame: The loaded data as a pandas DataFrame.
     """
     try:
         df = pd.read_csv(file_path)
         logger.info(f"Data successfully loaded from {file_path}")
-    
+
         # Basic validation
         if df.empty:
             raise ValueError("Loaded dataset is empty")
@@ -32,4 +32,3 @@ def load_data_from_csv(file_path, expected_columns=None) -> pd.DataFrame:
         raise e
 
     return df
-    

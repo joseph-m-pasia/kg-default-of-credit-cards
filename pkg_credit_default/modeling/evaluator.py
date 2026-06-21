@@ -1,10 +1,11 @@
 from typing import Dict
 import numpy as np
 
-from pkg_credit_default.utils.logger      import logger
-from pkg_credit_default.modeling.plotter  import plot_metric_comparison
+from pkg_credit_default.utils.logger import logger
+from pkg_credit_default.modeling.plotter import plot_metric_comparison
 
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+
 
 def evaluate_model(model, X_test: np.ndarray, y_test: np.ndarray) -> Dict[str, float]:
     """
@@ -39,11 +40,11 @@ def evaluate_model(model, X_test: np.ndarray, y_test: np.ndarray) -> Dict[str, f
         "f1_score": f1,
         "roc_auc": roc_auc,
         "y_pred": y_pred,
-        "y_proba": y_proba
+        "y_proba": y_proba,
     }
 
-def select_champion_model(score_results: list, metric: str = "f1_score", plot_metrics: bool = False) -> tuple:
 
+def select_champion_model(score_results: list, metric: str = "f1_score", plot_metrics: bool = False) -> tuple:
     """
     Select the champion model based on the specified metric and optionally plot the comparison.
     Input:
@@ -55,7 +56,7 @@ def select_champion_model(score_results: list, metric: str = "f1_score", plot_me
     logger.info(f"Selecting champion model based on {metric}...")
     for model_name, score in score_results:
         logger.info(f"{model_name} - {metric}: {score:.4f}")
-    
+
     if plot_metrics:
         logger.info(f"Plotting {metric} comparison across models...")
         model_scores = [(model, scores) for model, scores in score_results]
@@ -66,12 +67,13 @@ def select_champion_model(score_results: list, metric: str = "f1_score", plot_me
 
     return champion_model
 
+
 # =====================================
 # EXAMPLE USAGE
 # =====================================
 
 if __name__ == "__main__":
-    """ 
+    """
     This is just an example of how to use the evaluate_model function.
     In practice, you would call this function after training your model and splitting your data into train/test sets.
     """
@@ -82,7 +84,7 @@ if __name__ == "__main__":
 
     # Create a synthetic dataset
     X, y = make_classification(n_samples=1000, n_features=20, n_classes=2, random_state=42)
-    
+
     # Split into train and test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -95,10 +97,12 @@ if __name__ == "__main__":
     print(test)
 
     # Select champion model example
-    score_results = [("random_forest", 0.82), 
-                     ("logistic_regression", 0.80), 
-                     ("xgb_regressor", 0.85), 
-                     ("knn", 0.78), 
-                     ("lightgbm", 0.83)]
+    score_results = [
+        ("random_forest", 0.82),
+        ("logistic_regression", 0.80),
+        ("xgb_regressor", 0.85),
+        ("knn", 0.78),
+        ("lightgbm", 0.83),
+    ]
 
-    select_champion_model(score_results, metric="f1_score", plot_metrics=False)  
+    select_champion_model(score_results, metric="f1_score", plot_metrics=False)

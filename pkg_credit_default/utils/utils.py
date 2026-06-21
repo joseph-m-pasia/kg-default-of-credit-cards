@@ -1,7 +1,7 @@
 from pkg_credit_default.utils.logger import logger
 from datetime import datetime
 
-import os   
+import os
 import joblib
 
 
@@ -13,15 +13,18 @@ def save_model(model, model_dir, model_type="", timestamp=True) -> str:
 
     tstamp = datetime.now().strftime("%Y%m%d_%H%M%S") if timestamp else ""
 
-    model_dir = os.path.join(model_dir, tstamp + f"_{model_type}")  # e.g. "outputs/models/20240101_120000_logistic_regression"
-    os.makedirs(model_dir, exist_ok=True)                           # create folder if it doesn't exist
+    model_dir = os.path.join(
+        model_dir, tstamp + f"_{model_type}"
+    )  # e.g. "outputs/models/20240101_120000_logistic_regression"
+    os.makedirs(model_dir, exist_ok=True)  # create folder if it doesn't exist
 
     model_path = os.path.join(model_dir, f"{model_type}_model.pkl")
     joblib.dump(model, model_path)
-  
+
     logger.info(f"Model saved to {model_path}")
 
-    return model_path  
+    return model_path
+
 
 def load_ml_model(model_path: str = None):
     """
@@ -31,7 +34,7 @@ def load_ml_model(model_path: str = None):
     Returns: The loaded model object, or None if the file does not exist.
     """
     logger.info("Loading model and its metrics...")
- 
+
     if os.path.exists(model_path):
         ml_model = joblib.load(model_path)
         return ml_model
