@@ -1,7 +1,5 @@
 # =================== IMPORTS =================== 
 from pkg_credit_default.config.config_loader    import load_config
-from pkg_credit_default.data.raw_loader         import load_data_from_csv
-from pkg_credit_default.data.data_cleaning      import clean_data, remove_variables
 from pkg_credit_default.data.data_preparation   import prepare_data
 from pkg_credit_default.modeling.trainer        import train_model
 from pkg_credit_default.utils.logger            import logger
@@ -28,8 +26,7 @@ def run_training_pipeline(model_type: list = ['logistic_regression'], params: di
 
     # initialize the parameters
     save_output = params.get("save_output", True)
-    plot_metrics = params.get("plot_metrics", False)
-
+ 
     logger.info("Starting training pipeline...")
 
     # STEP 0 - Load the configuration
@@ -57,7 +54,7 @@ def run_training_pipeline(model_type: list = ['logistic_regression'], params: di
         # create directories if they don't exist
         os.makedirs(config["paths"]["output_dir_data"], exist_ok=True)
         train_df.to_csv(os.path.join(config["paths"]["output_dir_data"], "train.csv"), index=False)
-        test_df.to_csv(os.path.join(config["paths"]["output_dir_data"], "test.csv"),   index=False)
+        test_df.to_csv(os.path.join(config["paths"]["output_dir_data"], "test.csv"), index=False)
     
     # STEP 3 - Build and train the model
     best_models = {} 
@@ -75,7 +72,7 @@ def run_training_pipeline(model_type: list = ['logistic_regression'], params: di
                                            key=lambda item: item[1]["best_score"])
     champion_model = (best_model_name, best_model_info)
     model_dir = config["paths"]["output_dir_models"]
-    model_path = save_model(champion_model, model_dir, f"champion_{best_model_name}", timestamp=True)
+    save_model(champion_model, model_dir, f"champion_{best_model_name}", timestamp=True)
 
     # STEP 5 - Evaluate the champion model using the test set (if needed)
     logger.info(f"Evaluating champion model {champion_model[0]} on test set...")
@@ -96,7 +93,7 @@ def run_training_pipeline(model_type: list = ['logistic_regression'], params: di
 ####################### EXAMPLE USAGE ############################    
 
 if __name__ == "__main__":
-    list_of_models = ["logistic_regression"] # "xgb_regressor", "knn", "lightgbm"]
+    list_of_models = ["logistic_regression"]   # "xgb_regressor", "knn", "lightgbm"]
     
     champion_model = run_training_pipeline(model_type = list_of_models, 
                                            params     = {"save_output": False, 

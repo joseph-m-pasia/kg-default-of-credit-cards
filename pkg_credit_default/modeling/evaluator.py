@@ -1,4 +1,4 @@
-typing import Dict
+from typing import Dict
 import numpy as np
 
 from pkg_credit_default.utils.logger      import logger
