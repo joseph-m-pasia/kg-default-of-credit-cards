@@ -2,26 +2,25 @@
 # ML projects need longer lines
 max-line-length = 120
 
-# Ignore rules that create noise but do not affect correctness
-ignore =
-    E203  # whitespace before ':', black-compatible
-    E266  # too many leading '#' for block comment
-    E501  # line too long (we override with max-line-length)
-    W503  # line break before binary operator
-    W291  # trailing whitespace
-    W292  # no newline at end of file
-    W293  # blank line contains whitespace
-    E302  # expected 2 blank lines
-    E305  # expected 2 blank lines after class/function
-    E303  # too many blank lines
-    E231  # missing whitespace after comma
-    E221  # multiple spaces before operator
-    E251  # unexpected spaces around keyword/parameter equals
-    E272  # multiple spaces before keyword
+# Ignore noisy rules that do not affect correctness  
+ignore = 
+    E203
+    E266
+    E501
+    W503
+    W291
+    W292
+    W293
+    E302
+    E305
+    E303
+    E231
+    E221
+    E251
+    E272
 
 # Keep rules that catch real bugs
-select =
-    E,F,W
+select = E,F,W
 
 # Exclude directories that should not be linted
 exclude =
