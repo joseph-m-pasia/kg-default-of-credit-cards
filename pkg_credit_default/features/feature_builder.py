@@ -1,5 +1,3 @@
-from transformers import pipeline
-
 from pkg_credit_default.utils.logger import logger
 from sklearn.base import BaseEstimator, TransformerMixin
 import pandas as pd

@@ -1,11 +1,7 @@
-from pyexpat import model 
-import joblib
-
 from pkg_credit_default.utils.logger import logger
 from pkg_credit_default.utils.utils import save_model
 from pkg_credit_default.features.feature_builder import FeatureEngineering
 
-from sklearn.model_selection import cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
@@ -103,4 +99,3 @@ def train_model(X_train, y_train, config, model_type="logistic_regression", save
         "model_path": model_path if save_output else None,
         "grid_search": grid_search
     }
-

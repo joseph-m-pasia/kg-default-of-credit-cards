@@ -1,7 +1,4 @@
-from logging import config
-
-from fastapi import params
-from typing import Dict
+typing import Dict
 import numpy as np
 
 from pkg_credit_default.utils.logger      import logger
@@ -73,8 +70,10 @@ def select_champion_model(score_results: list, metric: str = "f1_score", plot_me
 
 #========= EXAMPLE USAGE =========
 if __name__ == "__main__":
-    # This is just an example of how to use the evaluate_model function.
-    # In practice, you would call this function after training your model and splitting your data into train/test sets.
+    """ 
+    This is just an example of how to use the evaluate_model function.
+    In practice, you would call this function after training your model and splitting your data into train/test sets.
+    """
 
     from sklearn.datasets import make_classification
     from sklearn.ensemble import RandomForestClassifier
@@ -95,6 +94,10 @@ if __name__ == "__main__":
     print(test)
 
     # Select champion model example
-    score_results = [("random_forest", 0.82), ("logistic_regression", 0.80), ("xgb_regressor", 0.85),   ("knn", 0.78), ("lightgbm", 0.83)]
+    score_results = [("random_forest", 0.82), 
+                     ("logistic_regression", 0.80), 
+                     ("xgb_regressor", 0.85), 
+                     ("knn", 0.78), 
+                     ("lightgbm", 0.83)]
 
     select_champion_model(score_results, metric="f1_score", plot_metrics=False)  

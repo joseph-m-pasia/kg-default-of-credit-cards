@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from pkg_credit_default.config.settings import settings
 

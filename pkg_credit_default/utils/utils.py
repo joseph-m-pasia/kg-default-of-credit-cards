@@ -1,12 +1,8 @@
 from pkg_credit_default.utils.logger import logger
 from datetime import datetime
 
-from pyexpat import model 
-
 import os   
 import joblib
-import importlib
-from typing import Any, Dict
 
 
 def save_model(model, model_dir, model_type="", timestamp=True) -> str:
