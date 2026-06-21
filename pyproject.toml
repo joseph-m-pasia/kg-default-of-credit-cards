@@ -25,3 +25,7 @@ dev = [
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["pkg_credit_default*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
