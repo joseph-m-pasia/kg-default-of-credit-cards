@@ -1,0 +1,64 @@
+# -------------------------
+# Python
+# -------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# -------------------------
+# ML Artifacts
+# -------------------------
+artifacts/
+models/
+checkpoints/
+outputs/
+runs/
+logs/
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.onnx
+
+# -------------------------
+# Data
+# -------------------------
+data/raw/
+data/interim/
+data/processed/
+*.csv
+*.parquet
+*.feather
+
+# -------------------------
+# Config / Secrets
+# -------------------------
+*.env
+.env.*
+secrets/
+credentials/
+
+# -------------------------
+# Build / Packaging
+# -------------------------
+build/
+dist/
+*.egg-info/
+
+# -------------------------
+# OS / Editor files
+# -------------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
