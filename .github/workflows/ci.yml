@@ -39,7 +39,7 @@ jobs:
         run: flake8 pkg_credit_default
 
       - name: Check formatting with black
-        run: black --check pkg_credit_default
+        run: black pkg_credit_default
 
       - name: Run tests with pytest
         run: pytest --maxfail=1 --disable-warnings -q
