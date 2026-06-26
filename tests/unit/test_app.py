@@ -1,0 +1,18 @@
+def test_predict(client):
+    '''
+    When you send a valid JSON payload to /predict, the API responds with HTTP 200 OK.
+    This confirms that:
+    - the endpoint exists
+    - FastAPI can parse the input
+    - the model loads correctly
+    - the endpoint does not crash
+    It’s a smoke test — a minimal test to ensure the endpoint is alive.
+    '''
+    payload = {
+        "LIMIT_BAL": 20000,
+        "AGE": 35
+    }
+
+    r = client.post("/predict", json=payload)
+
+    assert r.status_code == 200
