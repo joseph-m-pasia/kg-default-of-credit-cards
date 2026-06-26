@@ -17,7 +17,7 @@ def test_predict():
 
     payload = {
         "LIMIT_BAL": 20000,
-        "AGE": 35
+        "AGE": 35    
     }
 
     response = client.post(
