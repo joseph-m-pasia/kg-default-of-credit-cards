@@ -5,6 +5,7 @@ from app.main import app
 # Fixture
 client = TestClient(app)
 
+@patch("app.main.get_model")    
 def test_predict():
     '''
     When you send a valid JSON payload to /predict, the API responds with HTTP 200 OK.
