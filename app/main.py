@@ -42,7 +42,7 @@ def predict(
         .predict_proba(df)[0][1]
     )
 
-    return PredictResponse(
+    return PredictionResponse(
         prediction=int(prediction),
         probability=float(probability)
     )   
