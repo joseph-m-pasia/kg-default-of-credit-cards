@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import joblib
 
-from app.schemas import (
+from app.schema import (
     PredictRequest,
     PredictResponse
 )
