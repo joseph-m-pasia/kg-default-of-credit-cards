@@ -15,6 +15,9 @@ def test_predict():
     It’s a smoke test — a minimal test to ensure the endpoint is alive.
     '''
 
+    fake_model = mock_get_model.return_value
+    fake_model.predict.return_value = [1]
+
     payload = {
         "LIMIT_BAL": 20000,
         "AGE": 35    
