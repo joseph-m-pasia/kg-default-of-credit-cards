@@ -31,3 +31,4 @@ def test_predict(mock_get_model):
     )
 
     assert response.status_code == 200
+    assert response.json()["prediction"] == 1
