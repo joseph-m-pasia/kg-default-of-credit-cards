@@ -1,22 +1,27 @@
-# app/main.py
-
 from fastapi import FastAPI
 import joblib
-import pandas as pd
 
 app = FastAPI()
 
-model = joblib.load("artifacts/model.pkl")
+model = None
+
+
+def get_model():
+    global model
+
+    if model is None:
+        model = joblib.load("artifacts/model.pkl")
+
+    return model
+
 
 @app.post("/predict")
 def predict(data: dict):
 
-    df = pd.DataFrame([data])
+    model = get_model()
 
-    pred = model.predict(df)[0]
-    prob = model.predict_proba(df)[0][1]
+    prediction = model.predict([data])
 
     return {
-        "prediction": int(pred),
-        "probability": float(prob)
+        "prediction": int(prediction[0])
     }
