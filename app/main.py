@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import joblib
 
-from app.schemas.prediction import (
+from app.schemas import (
     PredictionRequest,
     PredictionResponse
 )
