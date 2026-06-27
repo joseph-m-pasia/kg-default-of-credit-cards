@@ -26,31 +26,31 @@ def test_predict(mock_get_model):
 
 
 
-    payload = PredictionRequest(
-        LIMIT_BAL=20000,
-        AGE=35,
-        PAY_0=1.0,
-        PAY_2=2.0,
-        PAY_3=3.0,
-        PAY_4=4.0,
-        PAY_5=5.0,
-        PAY_6=6.0,
-        BILL_AMT1=1000.0,
-        BILL_AMT2=2000.0,
-        BILL_AMT3=3000.0,
-        BILL_AMT4=4000.0,
-        BILL_AMT5=5000.0,
-        BILL_AMT6=6000.0,
-        PAY_AMT1=100.0,
-        PAY_AMT2=200.0,
-        PAY_AMT3=300.0,
-        PAY_AMT4=400.0,
-        PAY_AMT5=500.0,
-        PAY_AMT6=600.0,
-        EDUCATION=2,
-        MARRIAGE=1,
-        SEX=1
-    )
+    payload = {
+        "LIMIT_BAL": 20000,
+        "AGE": 35,
+        "PAY_0": 1.0,
+        "PAY_2": 2.0,
+        "PAY_3": 3.0,
+        "PAY_4": 4.0,
+        "PAY_5": 5.0,
+        "PAY_6": 6.0,
+        "BILL_AMT1": 1000.0,
+        "BILL_AMT2": 2000.0,
+        "BILL_AMT3": 3000.0,
+        "BILL_AMT4": 4000.0,
+        "BILL_AMT5": 5000.0,
+        "BILL_AMT6": 6000.0,
+        "PAY_AMT1": 100.0,
+        "PAY_AMT2": 200.0,
+        "PAY_AMT3": 300.0,
+        "PAY_AMT4": 400.0,
+        "PAY_AMT5": 500.0,
+        "PAY_AMT6": 600.0,
+        "EDUCATION": 2,
+        "MARRIAGE": 1,
+        "SEX": 1
+    }
 
     response = client.post(
         "/predict",
@@ -58,3 +58,5 @@ def test_predict(mock_get_model):
     )
 
     assert response.status_code == 200
+    assert response.json()["prediction"] == 1
+    assert response.json()["probability"] == 0.8
