@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import joblib
+import pandas as pd
 
 from app.schemas import (
     PredictionRequest,
