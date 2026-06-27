@@ -22,10 +22,10 @@ def get_model():
 
 @app.post(
     "/predict",
-    response_model=PredictResponse
+    response_model=PredictionResponse
 )
 def predict(
-    data: PredictRequest
+    data: PredictionRequest
 ):
 
     model = get_model()
