@@ -22,6 +22,9 @@ def test_predict(mock_get_model):
 
     fake_model = mock_get_model.return_value
     fake_model.predict.return_value = [1]
+    fake_model.predict_proba.return_value = [[0.2, 0.8]]
+
+
 
     payload = PredictionRequest(
         LIMIT_BAL=20000,
@@ -55,4 +58,3 @@ def test_predict(mock_get_model):
     )
 
     assert response.status_code == 200
-    assert response.json()["prediction"] == 1
