@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 import joblib
 
+from app.schemas import (
+    PredictRequest,
+    PredictResponse
+)
+
 app = FastAPI()
 
 model = None
@@ -15,13 +20,28 @@ def get_model():
     return model
 
 
-@app.post("/predict")
-def predict(data: dict):
+@app.post(
+    "/predict",
+    response_model=PredictResponse
+)
+def predict(
+    data: PredictRequest
+):
 
     model = get_model()
 
-    prediction = model.predict([data])
+    df = pd.DataFrame(
+        [data.model_dump()]
+    )
 
-    return {
-        "prediction": int(prediction[0])
-    }
+    prediction = model.predict(df)[0]
+
+    probability = (
+        model
+        .predict_proba(df)[0][1]
+    )
+
+    return PredictResponse(
+        prediction=int(prediction),
+        probability=float(probability)
+    )   
