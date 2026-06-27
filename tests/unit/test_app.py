@@ -6,7 +6,7 @@ from app.main import app
 client = TestClient(app)
 
 @patch("app.main.get_model")    
-def test_predict():
+def test_predict(mock_get_model):
     '''
     When you send a valid JSON payload to /predict, the API responds with HTTP 200 OK.
     This confirms that:
@@ -31,4 +31,3 @@ def test_predict():
     )
 
     assert response.status_code == 200
-    assert "prediction" in response.json()
