@@ -7,7 +7,7 @@ import joblib
 
 def save_model(model, model_dir, model_type="", timestamp=True) -> str:
     """
-    Save the trained model to disk.
+    Save the trained model and feature names to disk.
     """
     logger.info(f"Saving model '{model_type}' to disk...")
 
@@ -19,7 +19,22 @@ def save_model(model, model_dir, model_type="", timestamp=True) -> str:
     os.makedirs(model_dir, exist_ok=True)  # create folder if it doesn't exist
 
     model_path = os.path.join(model_dir, f"{model_type}_model.pkl")
-    joblib.dump(model, model_path)
+
+    # Extract feature names from the trained pipeline
+    try:
+        feature_names = list(model.feature_names_in_)
+        logger.info(f"Extracted {len(feature_names)} feature names from model.")
+    except AttributeError:
+        feature_names = None
+        logger.warning("Model has no attribute 'feature_names_in_'. Feature names will not be saved.")
+
+    # Save both model and feature names together
+    bundle = {
+        "model": model,
+        "feature_names": feature_names
+    }
+
+    joblib.dump(bundle, model_path)
 
     logger.info(f"Model saved to {model_path}")
 
