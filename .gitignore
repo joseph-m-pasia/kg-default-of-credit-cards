@@ -62,3 +62,8 @@ dist/
 Thumbs.db
 .vscode/
 .idea/
+
+# -------------------------
+# Python files
+# -------------------------
+test_api.py
