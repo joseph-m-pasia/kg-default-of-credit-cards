@@ -48,8 +48,8 @@ def build_pipeline(model):
                 ("imputer", SimpleImputer(strategy="median")),
                 ("scaler", StandardScaler()),
             ]),  
-            make_column_selector(dtype_include=np.number))
-        ],
+                make_column_selector(dtype_include=np.number))
+        ], 
         remainder="drop",
         verbose_feature_names_out=False
     )
