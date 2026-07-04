@@ -4,7 +4,7 @@ from pydantic import BaseModel
 class PredictionRequest(BaseModel):
     LIMIT_BAL: float
     AGE: int
-    PAY_0: float
+    PAY_1: float
     PAY_2: float
     PAY_3: float
     PAY_4: float    

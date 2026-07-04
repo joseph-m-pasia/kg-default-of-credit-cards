@@ -16,7 +16,8 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
         """
         Fit the feature engineering pipeline.
         """
-        # No fitting required for rule-based features
+
+        # No fitting required for rule-based features   
         return self
 
     def transform(self, X):
@@ -24,43 +25,29 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
         Transform the data using the feature engineering pipeline.
         """
         X = X.copy()  # Avoid modifying original dataframe
-        X = self._calc_average_balance(X)
-        X = self._calc_credit_utilization(X)
-        X = self._calc_late_payment_M1(X)
-
-        self.feature_names_out_ = X.columns.tolist()
-        return X
-
-    def _calc_average_balance(self, X):
-        logger.info("Calculating average balance over the last {} months...".format(self.n_months))
-
-        balance_vars = pd.DataFrame(
-            {f"balance_{i}": X[f"BILL_AMT{i}"] - X[f"PAY_AMT{i}"] for i in range(1, self.n_months + 1)}
-        )  # Calculate balance for each month
+       
+        balance_vars = pd.DataFrame({
+            f"balance_{i}": X[f"BILL_AMT{i}"] - X[f"PAY_AMT{i}"]
+            for i in range(1, self.n_months + 1)
+        })
 
         X["AVG_BALANCE_"] = balance_vars.mean(axis=1)
-
-        return X
-
-    def _calc_credit_utilization(self, X):
-        logger.info("Calculating credit utilization...")
-
-        # Define credit utilization ratio as average balance divided by credit limit (LIMIT_BAL)
         X["CREDIT_UTILIZATION_"] = X["AVG_BALANCE_"] / X["LIMIT_BAL"].replace(0, np.nan)
-
-        return X
-
-    def _calc_late_payment_M1(self, X):
-        logger.info("Calculating late payment indicator for M1...")
-
-        # Define late payment indicator as 1 if the payment in M1 (PAY_1) is late, else 0
-        X["LATE_PAYMENT_M1_"] = (X["PAY_1"] > 0).astype(int)
+        pay_col = "PAY_0" if "PAY_0" in X.columns else "PAY_1"
+        X["LATE_PAYMENT_M1_"] = (X[pay_col] > 0).astype(int)
 
         return X
 
     def get_feature_names_out(self, input_features=None):
-        return self.feature_names_out_
 
+        if input_features is None:
+            raise ValueError("input_features must be provided.")
+
+        return list(input_features) + [
+            "AVG_BALANCE_",
+            "CREDIT_UTILIZATION_",
+            "LATE_PAYMENT_M1_"
+        ]
 
 ####################### EXAMPLE USAGE ############################
 
@@ -75,4 +62,5 @@ if __name__ == "__main__":
         }
     )
     fe = FeatureEngineering(n_months=1)
-    df_transformed = fe._calc_average_balance(df.drop(columns=["target"]))
+    df_transformed = fe.transform(df.drop(columns=["target"]))
+    print(df_transformed)

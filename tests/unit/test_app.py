@@ -24,12 +24,20 @@ def test_predict(mock_get_model):
     fake_model.predict.return_value = [1]
     fake_model.predict_proba.return_value = [[0.2, 0.8]]
 
+    fake_feature_names = [
+        "LIMIT_BAL", "AGE",
+        "PAY_1", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6",
+        "BILL_AMT1", "BILL_AMT2", "BILL_AMT3", "BILL_AMT4", "BILL_AMT5", "BILL_AMT6",
+        "PAY_AMT1", "PAY_AMT2", "PAY_AMT3", "PAY_AMT4", "PAY_AMT5", "PAY_AMT6",
+        "EDUCATION", "MARRIAGE", "SEX"
+    ]
 
+    mock_get_model.return_value = (fake_model, fake_feature_names)
 
     payload = {
         "LIMIT_BAL": 20000,
         "AGE": 35,
-        "PAY_0": 1.0,
+        "PAY_1": 1.0,
         "PAY_2": 2.0,
         "PAY_3": 3.0,
         "PAY_4": 4.0,
