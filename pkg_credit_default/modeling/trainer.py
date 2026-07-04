@@ -1,14 +1,12 @@
-from sklearn.compose import ColumnTransformer
-
-from pkg_credit_default.utils.logger import logger
-from pkg_credit_default.utils.utils import save_model
+from pkg_credit_default.utils.logger             import logger
+from pkg_credit_default.utils.utils              import save_model
 from pkg_credit_default.features.feature_builder import FeatureEngineering
 
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler, FunctionTransformer
-from sklearn.impute import SimpleImputer
+from sklearn.pipeline        import Pipeline
+from sklearn.preprocessing   import StandardScaler
+from sklearn.impute          import SimpleImputer
 from sklearn.model_selection import GridSearchCV
-from sklearn.compose import ColumnTransformer, make_column_selector 
+from sklearn.compose         import ColumnTransformer, make_column_selector 
 
 import importlib
 import pandas as pd
@@ -50,7 +48,7 @@ def build_pipeline(model):
                 ("imputer", SimpleImputer(strategy="median")),
                 ("scaler", StandardScaler()),
             ]),  
-            make_column_selector(dtype_include=np.number),  )
+            make_column_selector(dtype_include=np.number))
         ],
         remainder="drop",
         verbose_feature_names_out=False
