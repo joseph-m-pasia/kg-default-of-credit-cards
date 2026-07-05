@@ -29,3 +29,4 @@ class PredictionRequest(BaseModel):
 class PredictionResponse(BaseModel):
     prediction: int
     probability: float
+    risk_category: str
