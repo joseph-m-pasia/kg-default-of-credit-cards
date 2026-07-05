@@ -1,3 +1,14 @@
+'''
+Description: Main FastAPI application for credit default prediction.
+This application provides endpoints for health checks and making predictions 
+using a trained machine learning model.
+
+To execute locally, run the following command in the terminal:
+uvicorn app.main:app --reload
+'''
+
+
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 import joblib
