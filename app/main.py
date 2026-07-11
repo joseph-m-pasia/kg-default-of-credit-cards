@@ -3,8 +3,11 @@ Description: Main FastAPI application for credit default prediction.
 This application provides endpoints for health checks and making predictions 
 using a trained machine learning model.
 
-To execute locally, run the following command in the terminal:
-uvicorn app.main:app --reload
+To execute locally: 
+1. Run the following command in the terminal: uvicorn app.main:app --reload
+2. Open the browser and navigate to http://127.0.0.1:8000/docs # to view the API documentation and test the endpoints.
+3. Use the /predict endpoint to send a POST request with the required input data for prediction.
+4. The response will include the prediction, probability, and risk category.
 '''
 
 
@@ -65,6 +68,18 @@ def health():
         "status": "i am healthy"
     }
 
+# -----------------------------------------------------------------------------
+# Root endpoint
+# -----------------------------------------------------------------------------
+
+@app.get("/")
+def root():
+    return {
+        "message": "Credit Default Prediction API",
+        "version": "1.0.0",
+        "docs": "/docs",
+        "health": "/health"
+    }
 
 # -----------------------------------------------------------------------------
 # Model loading
@@ -99,7 +114,7 @@ def predict(data: PredictionRequest):
         data (PredictionRequest): Input data for prediction.
     Returns:
         PredictionResponse: The prediction result and probability.
-    """
+     """
 
     logger.info("Received prediction request...")
 
