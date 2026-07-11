@@ -86,14 +86,14 @@ jobs:
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
 
-  deploy:
-    name: Deploy to Render
-    needs: docker
+#  deploy:
+#    name: Deploy to Render
+#    needs: docker
 
-    if: github.ref == 'refs/heads/main'
+#    if: github.ref == 'refs/heads/main'
 
-    runs-on: ubuntu-latest
+#    runs-on: ubuntu-latest
 
-    steps:
-      - name: Trigger Render deployment
-        run: curl "${{ secrets.RENDER_DEPLOY_HOOK }}"
+#    steps:
+#      - name: Trigger Render deployment
+#        run: curl "${{ secrets.RENDER_DEPLOY_HOOK }}"
