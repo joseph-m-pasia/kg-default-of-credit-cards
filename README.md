@@ -187,7 +187,7 @@ Example results:
 ### Clone the repository
 
 ```bash
-git clone https://github.com/<username>/credit-default-api.git
+git clone https://github.com/<username>/kg-default-of-credit-cards.git
 
 cd credit-default-api
 ```
