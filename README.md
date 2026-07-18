@@ -1,3 +1,5 @@
+![CI Status](https://github.com/joseph-m-pasia/kg-default-of-credit-cards/actions/workflows/ci.yml/badge.svg)
+
 # Credit Default Prediction API
 
 A production-ready machine learning project that predicts whether a credit card client is likely to default on their next payment.
