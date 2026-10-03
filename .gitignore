@@ -33,7 +33,6 @@ logs/
 # -------------------------
 # Data
 # -------------------------
-data/raw/
 data/interim/
 data/processed/
 *.csv

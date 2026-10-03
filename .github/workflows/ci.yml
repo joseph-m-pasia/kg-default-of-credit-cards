@@ -1,6 +1,6 @@
 # create a workflow that runs tests on push and pull request events
 
-name: CI/CD
+name: CI
 
 on:
   push:
