@@ -27,6 +27,8 @@ from app.schemas import (
     PredictionResponse
 )
 
+from app.schemas.defaults import DEFAULT_FEATURES
+
 # -----------------------------------------------------------------------------
 # Configuration
 # -----------------------------------------------------------------------------
@@ -124,8 +126,11 @@ def predict(data: PredictionRequest):
     try: 
 
         # Create a DataFrame from the input data
+        input_data = data.model_dump()
+        input_data.update(DEFAULT_FEATURES)  # Merge with default features
+
         df = pd.DataFrame(
-            [data.model_dump()]
+            [input_data]
         )
         
         # Ensure the DataFrame has the same columns as the model was trained on
