@@ -11,7 +11,7 @@ To execute locally:
 '''
 
 
-
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 import joblib
@@ -55,6 +55,14 @@ app = FastAPI(
     title="Credit Default Prediction API",
     version="1.0.0",
     lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 model_bundle = None
