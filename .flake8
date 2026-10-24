@@ -5,6 +5,7 @@ max-line-length = 120
 # Ignore noisy rules that do not affect correctness  
 ignore = 
     E203
+    E265
     E266
     E501
     W503
@@ -16,8 +17,11 @@ ignore =
     E303
     E231
     E221
+    E241
     E251
     E272
+    E402
+    F401 
 
 # Keep rules that catch real bugs
 select = E,F,W

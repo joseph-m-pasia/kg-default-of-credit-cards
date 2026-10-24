@@ -69,4 +69,3 @@ import shutil
 
 
 #shutil.copy(f"{champion_model_dir}/champion_logistic_regression_model.pkl", "artifacts/model.pkl")
-            

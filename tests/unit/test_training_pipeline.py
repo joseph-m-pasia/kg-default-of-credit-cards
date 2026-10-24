@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import pytest
 
 from pkg_credit_default.modeling.trainer   import train_model
@@ -90,5 +89,5 @@ def test_training_pipeline_end_to_end(sample_data, sample_config):
     # pred = loaded["model"].predict(sample)
     # proba = loaded["model"].predict_proba(sample)
 
-   #  assert pred.shape == (1,), "Prediction shape incorrect"
-   #  assert proba.shape == (1, 2), "Probability shape incorrect"
+    # assert pred.shape == (1,), "Prediction shape incorrect"
+    # assert proba.shape == (1, 2), "Probability shape incorrect"

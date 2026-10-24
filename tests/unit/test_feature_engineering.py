@@ -1,7 +1,5 @@
 import pandas as pd
 
-from sklearn.pipeline import Pipeline
-
 from pkg_credit_default.features.feature_builder import FeatureEngineering
 
 def create_sample_dataframe():

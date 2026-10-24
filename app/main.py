@@ -14,9 +14,7 @@ To execute locally:
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
-import joblib
 import pandas as pd
-import os
 from pathlib import Path
 
 from pkg_credit_default.utils.logger import logger
@@ -116,7 +114,6 @@ def get_model():
     response_model=PredictionResponse
 )
 
-
 def predict(data: PredictionRequest):
     """
     Endpoint to make predictions using the trained model.
@@ -166,4 +163,3 @@ def predict(data: PredictionRequest):
     except Exception as e:
         logger.error(f"Error occurred while making prediction: {e}")
         raise HTTPException(status_code=500, detail="Error occurred while making prediction")
-
