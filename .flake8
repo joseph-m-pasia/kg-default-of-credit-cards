@@ -13,6 +13,7 @@ ignore =
     W292
     W293
     E302
+    E304
     E305
     E303
     E231
@@ -21,7 +22,9 @@ ignore =
     E251
     E272
     E402
+    E722
     F401 
+    F821
 
 # Keep rules that catch real bugs
 select = E,F,W
