@@ -67,7 +67,6 @@ jobs:
     needs:
       - lint
       - unit-tests
-      - integration-tests
 
     steps:
       - name: Checkout repository
