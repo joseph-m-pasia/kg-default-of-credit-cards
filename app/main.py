@@ -152,6 +152,8 @@ def predict(data: PredictionRequest):
         # Simple risk categorization based on probability
         if probability >= 0.5:
             risk_category = "High Risk"
+        elif probability >= 0.2:
+            risk_category = "Medium Risk"
         else:
             risk_category = "Low Risk"
 

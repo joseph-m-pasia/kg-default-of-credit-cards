@@ -110,7 +110,7 @@ function App() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="pay1">Payment Status (PAY_1)</label>
+            <label htmlFor="pay1">Payment Status</label>
             <select
               id="pay1"
               value={pay1}
@@ -132,7 +132,7 @@ function App() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="billAmt1">Bill Amount (Last Month)</label>
+            <label htmlFor="billAmt1">Bill Amount</label>
             <input
               id="billAmt1"
               type="number"
@@ -143,7 +143,7 @@ function App() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="payAmt1">Payment Amount (Last Month)</label>
+            <label htmlFor="payAmt1">Payment Amount</label>
             <input
               id="payAmt1"
               type="number"
