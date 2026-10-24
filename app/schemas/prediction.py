@@ -11,6 +11,7 @@ class PredictionRequest(BaseModel):
     MARRIAGE: int
     SEX: int
 
+
 class PredictionResponse(BaseModel):
     prediction: int
     probability: float

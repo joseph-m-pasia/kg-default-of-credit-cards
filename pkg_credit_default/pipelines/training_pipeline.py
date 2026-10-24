@@ -9,7 +9,6 @@ from pkg_credit_default.modeling.evaluator import evaluate_model
 from sklearn.model_selection import train_test_split
 import os
 
-
 # =========================================================
 # =================== TRAINING PIPELINE ===================
 # =========================================================

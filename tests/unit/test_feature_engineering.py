@@ -2,15 +2,18 @@ import pandas as pd
 
 from pkg_credit_default.features.feature_builder import FeatureEngineering
 
+
 def create_sample_dataframe():
 
-    return pd.DataFrame({
-        "BILL_AMT1": [100, 200],
-        "PAY_AMT1": [20, 50],
-        "LIMIT_BAL": [1000, 2000],
-        "PAY_1": [1, 0],
-        "target": [0, 1],
-    })
+    return pd.DataFrame(
+        {
+            "BILL_AMT1": [100, 200],
+            "PAY_AMT1": [20, 50],
+            "LIMIT_BAL": [1000, 2000],
+            "PAY_1": [1, 0],
+            "target": [0, 1],
+        }
+    )
 
 
 def test_fit_returns_self():

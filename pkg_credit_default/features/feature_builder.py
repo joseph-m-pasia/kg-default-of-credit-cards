@@ -16,7 +16,7 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
         Fit the feature engineering pipeline.
         """
 
-        # No fitting required for rule-based features   
+        # No fitting required for rule-based features
         return self
 
     def transform(self, X):
@@ -24,11 +24,10 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
         Transform the data using the feature engineering pipeline.
         """
         X = X.copy()  # Avoid modifying original dataframe
-       
-        balance_vars = pd.DataFrame({
-            f"balance_{i}": X[f"BILL_AMT{i}"] - X[f"PAY_AMT{i}"]
-            for i in range(1, self.n_months + 1)
-        })
+
+        balance_vars = pd.DataFrame(
+            {f"balance_{i}": X[f"BILL_AMT{i}"] - X[f"PAY_AMT{i}"] for i in range(1, self.n_months + 1)}
+        )
 
         X["AVG_BALANCE_"] = balance_vars.mean(axis=1)
         X["CREDIT_UTILIZATION_"] = X["AVG_BALANCE_"] / X["LIMIT_BAL"].replace(0, np.nan)
@@ -42,11 +41,8 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
         if input_features is None:
             raise ValueError("input_features must be provided.")
 
-        return list(input_features) + [
-            "AVG_BALANCE_",
-            "CREDIT_UTILIZATION_",
-            "LATE_PAYMENT_M1_"
-        ]
+        return list(input_features) + ["AVG_BALANCE_", "CREDIT_UTILIZATION_", "LATE_PAYMENT_M1_"]
+
 
 ####################### EXAMPLE USAGE ############################
 

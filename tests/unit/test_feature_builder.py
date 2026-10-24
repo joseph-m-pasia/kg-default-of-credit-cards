@@ -3,20 +3,22 @@ import pytest
 
 from pkg_credit_default.features.feature_builder import FeatureEngineering
 
-
 # -------------------------
 # Fixtures
 # -------------------------
 
+
 @pytest.fixture
 def sample_df():
-    return pd.DataFrame({
-        "BILL_AMT1": [100, 200, 250, 300, 400, 500],
-        "PAY_AMT1": [20, 50, 60, 70, 80, 90],
-        "LIMIT_BAL": [1000, 2000, 2500, 3000, 4000, 5000],
-        "PAY_1": [1, 0, 1, 0, 1, 0],
-        "target": [0, 1, 0, 1, 0, 1],
-    })
+    return pd.DataFrame(
+        {
+            "BILL_AMT1": [100, 200, 250, 300, 400, 500],
+            "PAY_AMT1": [20, 50, 60, 70, 80, 90],
+            "LIMIT_BAL": [1000, 2000, 2500, 3000, 4000, 5000],
+            "PAY_1": [1, 0, 1, 0, 1, 0],
+            "target": [0, 1, 0, 1, 0, 1],
+        }
+    )
 
 
 @pytest.fixture
@@ -29,6 +31,7 @@ def transformed_df(sample_df):
 # -------------------------
 # Tests
 # -------------------------
+
 
 def test_engineered_columns_exist(transformed_df):
     """Check that all engineered columns are created."""

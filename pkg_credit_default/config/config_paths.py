@@ -1,7 +1,6 @@
 from pathlib import Path
 from pkg_credit_default.config.settings import settings
 
-
 # define the environment variable to determine which config to use
 ENV = settings.ENV
 

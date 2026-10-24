@@ -4,13 +4,13 @@ from app.main import app
 
 from app.schemas import PredictionRequest
 
-
 # Fixture
 client = TestClient(app)
 
-@patch("app.main.get_model")    
+
+@patch("app.main.get_model")
 def test_predict(mock_get_model):
-    '''
+    """
     When you send a valid JSON payload to /predict, the API responds with HTTP 200 OK.
     This confirms that:
     - the endpoint exists
@@ -18,18 +18,36 @@ def test_predict(mock_get_model):
     - the model loads correctly
     - the endpoint does not crash
     It’s a smoke test — a minimal test to ensure the endpoint is alive.
-    '''
+    """
 
     fake_model = mock_get_model.return_value
     fake_model.predict.return_value = [1]
     fake_model.predict_proba.return_value = [[0.2, 0.8]]
 
     fake_feature_names = [
-        "LIMIT_BAL", "AGE",
-        "PAY_1", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6",
-        "BILL_AMT1", "BILL_AMT2", "BILL_AMT3", "BILL_AMT4", "BILL_AMT5", "BILL_AMT6",
-        "PAY_AMT1", "PAY_AMT2", "PAY_AMT3", "PAY_AMT4", "PAY_AMT5", "PAY_AMT6",
-        "EDUCATION", "MARRIAGE", "SEX"
+        "LIMIT_BAL",
+        "AGE",
+        "PAY_1",
+        "PAY_2",
+        "PAY_3",
+        "PAY_4",
+        "PAY_5",
+        "PAY_6",
+        "BILL_AMT1",
+        "BILL_AMT2",
+        "BILL_AMT3",
+        "BILL_AMT4",
+        "BILL_AMT5",
+        "BILL_AMT6",
+        "PAY_AMT1",
+        "PAY_AMT2",
+        "PAY_AMT3",
+        "PAY_AMT4",
+        "PAY_AMT5",
+        "PAY_AMT6",
+        "EDUCATION",
+        "MARRIAGE",
+        "SEX",
     ]
 
     mock_get_model.return_value = (fake_model, fake_feature_names)
@@ -57,13 +75,10 @@ def test_predict(mock_get_model):
         "PAY_AMT6": 600.0,
         "EDUCATION": 2,
         "MARRIAGE": 1,
-        "SEX": 1
+        "SEX": 1,
     }
 
-    response = client.post(
-        "/predict",
-        json=payload
-    )
+    response = client.post("/predict", json=payload)
 
     assert response.status_code == 200
     assert response.json()["prediction"] == 1

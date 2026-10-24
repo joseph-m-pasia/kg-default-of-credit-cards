@@ -1,12 +1,12 @@
-from pkg_credit_default.utils.logger             import logger
-from pkg_credit_default.utils.utils              import save_model
+from pkg_credit_default.utils.logger import logger
+from pkg_credit_default.utils.utils import save_model
 from pkg_credit_default.features.feature_builder import FeatureEngineering
 
-from sklearn.pipeline        import Pipeline
-from sklearn.preprocessing   import StandardScaler
-from sklearn.impute          import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
 from sklearn.model_selection import GridSearchCV
-from sklearn.compose         import ColumnTransformer, make_column_selector 
+from sklearn.compose import ColumnTransformer, make_column_selector
 
 import importlib
 import pandas as pd
@@ -35,6 +35,7 @@ def get_model_class_and_params(config: Dict, model_type: str, save_model: bool =
 
     return ModelClass, params, model_config
 
+
 def build_pipeline(model):
     """
     Build a pipeline with feature engineering, preprocessing, and the model.
@@ -44,14 +45,19 @@ def build_pipeline(model):
     # Define the preprocessing steps
     preprocessor = ColumnTransformer(
         transformers=[
-            ("num", Pipeline([
-                ("imputer", SimpleImputer(strategy="median")),
-                ("scaler", StandardScaler()),
-            ]),  
-                make_column_selector(dtype_include=np.number))
-        ], 
+            (
+                "num",
+                Pipeline(
+                    [
+                        ("imputer", SimpleImputer(strategy="median")),
+                        ("scaler", StandardScaler()),
+                    ]
+                ),
+                make_column_selector(dtype_include=np.number),
+            )
+        ],
         remainder="drop",
-        verbose_feature_names_out=False
+        verbose_feature_names_out=False,
     )
 
     memory = Memory(location="cache/sklearn", verbose=10)
@@ -60,21 +66,17 @@ def build_pipeline(model):
     pipeline = Pipeline(
         steps=[
             ("feature_engineering", FeatureEngineering(n_months=6)),  # Add feature engineering step
-            ("preprocessor", preprocessor),                           # Apply preprocessing
-            ("model", model),                                         # Add the model
+            ("preprocessor", preprocessor),  # Apply preprocessing
+            ("model", model),  # Add the model
         ],
         # Cache intermediate results to speed up GridSearchCV
-        memory=memory   
+        memory=memory,
     )
 
     return pipeline
 
 
-def train_model(X_train, 
-                y_train, 
-                config, 
-                model_type="logistic_regression", 
-                save_output=True) -> Dict[str, Any]:
+def train_model(X_train, y_train, config, model_type="logistic_regression", save_output=True) -> Dict[str, Any]:
 
     logger.info(f"Training {model_type} model...")
 
@@ -88,7 +90,7 @@ def train_model(X_train,
     regressor = ModelClass(**default_params)
 
     param_grid = model_config.get("param_grid", {})
-    
+
     pipeline = build_pipeline(regressor)
 
     logger.info("Pipeline steps:")
@@ -113,7 +115,7 @@ def train_model(X_train,
     logger.info(f"Model training of {model_type} completed.")
 
     best_model = grid_search.best_estimator_
-   
+
     # ======================= Logging Results =======================
 
     best_idx = grid_search.best_index_
@@ -144,13 +146,15 @@ def train_model(X_train,
 # =========================
 if __name__ == "__main__":
 
-    df = pd.DataFrame({
-        "BILL_AMT1": [100, 200, 150, 250, 300],
-        "PAY_AMT1": [20, 50, 30, 60, 70],
-        "LIMIT_BAL": [1000, 2000, 1500, 2500, 3000],
-        "PAY_1": [1, 0, 1, 0, 1],
-        "target": [0, 1, 0, 1, 0],
-    })
+    df = pd.DataFrame(
+        {
+            "BILL_AMT1": [100, 200, 150, 250, 300],
+            "PAY_AMT1": [20, 50, 30, 60, 70],
+            "LIMIT_BAL": [1000, 2000, 1500, 2500, 3000],
+            "PAY_1": [1, 0, 1, 0, 1],
+            "target": [0, 1, 0, 1, 0],
+        }
+    )
 
     X = df.drop(columns=["target"])
     y = df["target"]
@@ -160,13 +164,7 @@ if __name__ == "__main__":
 
     pipeline = build_pipeline(model)
 
-    grid = GridSearchCV(
-        pipeline,
-        param_grid={},
-        cv=2,
-        scoring="accuracy",
-        refit=True
-    )
+    grid = GridSearchCV(pipeline, param_grid={}, cv=2, scoring="accuracy", refit=True)
 
     grid.fit(X, y)
 
@@ -177,9 +175,7 @@ if __name__ == "__main__":
     # =========================
     X_fe = best_model.named_steps["feature_engineering"].transform(X)
 
-    feature_names = best_model.named_steps["preprocessor"].get_feature_names_out(
-        X_fe.columns
-    )
+    feature_names = best_model.named_steps["preprocessor"].get_feature_names_out(X_fe.columns)
 
     print("\nFINAL FEATURES:")
     print(feature_names)

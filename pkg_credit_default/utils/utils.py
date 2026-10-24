@@ -29,10 +29,7 @@ def save_model(model, model_dir, model_type="", timestamp=True) -> str:
         logger.warning("Model has no attribute 'feature_names_in_'. Feature names will not be saved.")
 
     # Save both model and feature names together
-    bundle = {
-        "model": model,
-        "feature_names": feature_names
-    }
+    bundle = {"model": model, "feature_names": feature_names}
 
     joblib.dump(bundle, model_path)
 
