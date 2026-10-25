@@ -18,13 +18,11 @@ env/
 # -------------------------
 # ML Artifacts
 # -------------------------
-artifacts/
-models/
+artifacts/models
 checkpoints/
 outputs/
 runs/
 logs/
-*.pkl
 *.joblib
 *.h5
 *.pt
