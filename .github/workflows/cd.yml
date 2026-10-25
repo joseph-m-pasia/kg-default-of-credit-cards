@@ -41,16 +41,24 @@ jobs:
             ghcr.io/${{ github.repository }}:${{ github.sha }}
             ghcr.io/${{ github.repository }}:latest
 
+      - name: Verify Render secret exists
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        shell: bash
+        run: |
+          if [ -n "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "SUCCESS: Render deploy hook secret is configured."
+          else
+            echo "::error::RENDER_DEPLOY_HOOK_URL secret is missing or empty"
+            exit 1
+          fi
+
       - name: Deploy image to Render
         env:
           RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
           IMAGE_URL: ghcr.io/${{ github.repository }}:${{ github.sha }}
+        shell: bash
         run: |
-          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
-            echo "::error::RENDER_DEPLOY_HOOK_URL secret is not configured"
-            exit 1
-          fi
-
           ENCODED_IMAGE_URL="$(
             IMAGE_URL="$IMAGE_URL" python -c \
               'import os, urllib.parse; print(urllib.parse.quote(os.environ["IMAGE_URL"], safe=""))'
