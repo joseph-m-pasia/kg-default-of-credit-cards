@@ -1,4 +1,5 @@
 ![CI Status](https://github.com/joseph-m-pasia/kg-default-of-credit-cards/actions/workflows/ci.yml/badge.svg)
+[![CD](https://github.com/joseph-m-pasia/kg-default-of-credit-cards/actions/workflows/cd.yml/badge.svg)](https://github.com/joseph-m-pasia/kg-default-of-credit-cards/actions/workflows/cd.yml)
 
 # Credit Default Prediction API
 
