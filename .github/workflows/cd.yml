@@ -6,12 +6,15 @@ on:
     branches:
       - main
 
+  workflow_dispatch:
+
 permissions:
   contents: read
   packages: write
 
 jobs:
   deploy:
+    name: Build, Publish and Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -37,3 +40,27 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.sha }}
             ghcr.io/${{ github.repository }}:latest
+
+      - name: Deploy image to Render
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          IMAGE_URL: ghcr.io/${{ github.repository }}:${{ github.sha }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "::error::RENDER_DEPLOY_HOOK_URL secret is not configured"
+            exit 1
+          fi
+
+          ENCODED_IMAGE_URL="$(
+            IMAGE_URL="$IMAGE_URL" python -c \
+              'import os, urllib.parse; print(urllib.parse.quote(os.environ["IMAGE_URL"], safe=""))'
+          )"
+
+          case "$RENDER_DEPLOY_HOOK_URL" in
+            *\?*) SEPARATOR="&" ;;
+            *)    SEPARATOR="?" ;;
+          esac
+
+          curl --fail --silent --show-error \
+            --request POST \
+            "${RENDER_DEPLOY_HOOK_URL}${SEPARATOR}imgURL=${ENCODED_IMAGE_URL}"
