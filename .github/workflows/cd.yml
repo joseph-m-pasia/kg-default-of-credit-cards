@@ -52,23 +52,32 @@ jobs:
             echo "::error::RENDER_DEPLOY_HOOK_URL secret is missing or empty"
             exit 1
           fi
-
+ 
       - name: Deploy image to Render
         env:
           RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
           IMAGE_URL: ghcr.io/${{ github.repository }}:${{ github.sha }}
         shell: bash
         run: |
-          ENCODED_IMAGE_URL="$(
-            IMAGE_URL="$IMAGE_URL" python -c \
-              'import os, urllib.parse; print(urllib.parse.quote(os.environ["IMAGE_URL"], safe=""))'
-          )"
+          RESPONSE_FILE="$(mktemp)"
 
-          case "$RENDER_DEPLOY_HOOK_URL" in
-            *\?*) SEPARATOR="&" ;;
-            *)    SEPARATOR="?" ;;
-          esac
+          HTTP_STATUS=$(curl \
+            --silent \
+            --show-error \
+            --output "$RESPONSE_FILE" \
+            --write-out "%{http_code}" \
+            --get \
+            --data-urlencode "imgURL=$IMAGE_URL" \
+            "$RENDER_DEPLOY_HOOK_URL")
 
-          curl --fail --silent --show-error \
-            --request POST \
-            "${RENDER_DEPLOY_HOOK_URL}${SEPARATOR}imgURL=${ENCODED_IMAGE_URL}"
+          echo "Render HTTP status: $HTTP_STATUS"
+          echo "Render response:"
+          cat "$RESPONSE_FILE"
+          rm -f "$RESPONSE_FILE"
+
+          if [ "$HTTP_STATUS" != "200" ] &&
+             [ "$HTTP_STATUS" != "202" ]; then
+            echo "::error::Render deployment request failed."
+            exit 1
+          fi
+
