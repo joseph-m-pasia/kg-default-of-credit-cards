@@ -1,27 +1,30 @@
-# Base image
+# Stage 1: Build the React + TypeScript frontend
+FROM node:22-alpine AS frontend-build
+
+WORKDIR /frontend
+
+COPY frontend/package*.json ./
+RUN npm install
+
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Build the FastAPI application
 FROM python:3.11-slim
 
-# Prevent Python from writing .pyc files
 ENV PYTHONDONTWRITEBYTECODE=1
-
-# Show logs immediately
 ENV PYTHONUNBUFFERED=1
 
-# Working directory
 WORKDIR /app
 
-# Copy dependency files first
 COPY pyproject.toml ./
+RUN pip install --upgrade pip && pip install .
 
-# Install dependencies
-RUN pip install --upgrade pip
-RUN pip install .
-
-# Copy the rest of the project
 COPY . .
 
-# Expose FastAPI port
+# Include the compiled React frontend in the final image
+COPY --from=frontend-build /frontend/dist ./frontend/dist
+
 EXPOSE 8000
 
-# Start the API
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

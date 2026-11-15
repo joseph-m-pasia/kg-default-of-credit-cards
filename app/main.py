@@ -10,6 +10,7 @@ To execute locally:
 4. The response will include the prediction, probability, and risk category.
 """
 
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
@@ -77,10 +78,6 @@ def health():
 # Root endpoint
 # -----------------------------------------------------------------------------
 
-
-@app.get("/")
-def root():
-    return {"message": "Credit Default Prediction API", "version": "1.0.0", "docs": "/docs", "health": "/health"}
 
 
 # -----------------------------------------------------------------------------
@@ -151,3 +148,11 @@ def predict(data: PredictionRequest):
     except Exception as e:
         logger.error(f"Error occurred while making prediction: {e}")
         raise HTTPException(status_code=500, detail="Error occurred while making prediction")
+
+# Serve the React frontend.
+# Keep this after the API routes so /predict and /health remain available.
+app.mount(
+    "/",
+    StaticFiles(directory="frontend/dist", html=True),
+    name="frontend",
+)
