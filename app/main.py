@@ -150,8 +150,12 @@ def predict(data: PredictionRequest):
 
 # Serve the React frontend.
 # Keep this after the API routes so /predict and /health remain available.
-app.mount(
-    "/",
-    StaticFiles(directory="frontend/dist", html=True),
-    name="frontend",
-)
+# Serve the React frontend if the production build exists
+FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
+
+if FRONTEND_DIST.exists():
+    app.mount(
+        "/",
+        StaticFiles(directory=str(FRONTEND_DIST), html=True),
+        name="frontend",
+    )
