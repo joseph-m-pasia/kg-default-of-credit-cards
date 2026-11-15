@@ -133,7 +133,7 @@ def predict(data: PredictionRequest):
         probability = model.predict_proba(df)[0][1]
 
         # Simple risk categorization based on probability
-        if probability >= 0.5:
+        if probability >= 0.4:
             risk_category = "High Risk"
         elif probability >= 0.2:
             risk_category = "Medium Risk"
