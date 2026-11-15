@@ -144,10 +144,12 @@ def predict(data: PredictionRequest):
         return PredictionResponse(
             prediction=int(prediction), probability=float(probability), risk_category=risk_category
         )
-
     except Exception as e:
-        logger.error(f"Error occurred while making prediction: {e}")
-        raise HTTPException(status_code=500, detail="Error occurred while making prediction")
+        logger.exception("Error occurred while making prediction")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Prediction failed: {str(e)}"
+        )
 
 # Serve the React frontend.
 # Keep this after the API routes so /predict and /health remain available.
