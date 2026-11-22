@@ -5,7 +5,7 @@ from pkg_credit_default.features.feature_builder import FeatureEngineering
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.compose import ColumnTransformer, make_column_selector
 
 import importlib
@@ -100,11 +100,17 @@ def train_model(X_train, y_train, config, model_type="logistic_regression", save
     # ======================= Grid Search =======================
     logger.info("Performing GridSearchCV...")
 
+    cv_strategy = StratifiedKFold(
+        n_splits=config["gridCV"]["cv"],
+        shuffle=True,
+        random_state=config["data"]["random_state"],
+    )
+
     metric = config["selection"]["primary_metric"]
     grid_search = GridSearchCV(
         estimator=pipeline,
         param_grid=param_grid,
-        cv=config["gridCV"]["cv"],
+        cv=cv_strategy,
         n_jobs=config["gridCV"]["n_jobs"],
         verbose=config["gridCV"]["verbose"],
         scoring=config["metrics"],

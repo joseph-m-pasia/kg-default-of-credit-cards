@@ -38,7 +38,7 @@ def run_training_pipeline(model_type: list = ["logistic_regression"], params: di
     # STEP 2 : Split into train and test sets (if needed)
     logger.info("Splitting data into train and test sets...")
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=config["data"]["test_size"], random_state=config["data"]["random_state"]
+        X, y, test_size=config["data"]["test_size"], random_state=config["data"]["random_state"], stratify=y
     )
     if params.get("save_split_data", False):
         # Save the split data
