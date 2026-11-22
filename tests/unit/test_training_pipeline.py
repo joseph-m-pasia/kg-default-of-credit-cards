@@ -37,6 +37,9 @@ def sample_config(tmp_path):
     Minimal config required for training.
     """
     return {
+        "data": {
+            "random_state": 42
+        },
         "models": {
             "logistic_regression": {
                 "class": "sklearn.linear_model.LogisticRegression",
